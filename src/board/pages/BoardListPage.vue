@@ -1,9 +1,9 @@
 <template lang="">
     <v-container>
         <div style="text-align: left; margin: 15px;">
-            <p>
+            <router-link :to="{ name: 'BoardCreatePage' }">
                 게시물 작성
-            </p>
+            </router-link>
         </div>
         <v-data-table
             v-model:item-per-page="perPage"
@@ -32,19 +32,19 @@ export default {
     },
     computed: {
         ...mapState(boardModule, ['boards']),
-        pagedItems () {
+        pagedItems() {
             const startIdx = (this.pagination.page - 1) * this.perPage
             const endIdx = startIdx + this.perPage
             return this.boards.slice(startIdx, endIdx)
         }
     },
-    mounted () {
+    mounted() {
         this.requestBoardListToSpring();
     },
     methods: {
         ...mapActions(boardModule, ['requestBoardListToSpring']),
     },
-    data () {
+    data() {
         return {
             headerTitle: [
                 {

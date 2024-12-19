@@ -1,0 +1,18 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "lib": ["ESNext", "DOM"],            // Include necessary libraries
+    "types": ["@nuxt/types"]             // Add Nuxt types for better support
+  },
+  "include": [
+    "nuxt.config.ts",
+    "pages/**/*.vue",
+    "components/**/*.vue",
+    "plugins/**/*.ts"                   // Include plugins for type checking
+  ]
+}

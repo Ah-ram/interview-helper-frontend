@@ -11,11 +11,18 @@ export default defineNuxtModule({
         const themeDir = resolve(__dirname, '..');
 
         nuxt.hook('pages:extend', (pages) => {
-            pages.push({
-                name: 'board-list',
-                path: '/board/list',
-                file: resolve(themeDir, 'board/pages/list.vue'),
-            });
+            pages.push(
+                {
+                    name: 'board-list',
+                    path: '/board/list',
+                    file: resolve(themeDir, 'board/pages/BoardListPage.vue'),
+                },
+                {
+                    name: "board-read",
+                    path: "/board/read/:id",
+                    file: resolve(themeDir, "board/pages/BoardReadPage.vue")
+                }
+            );
         });
 
         nuxt.hook('imports:dirs', (dirs) => {

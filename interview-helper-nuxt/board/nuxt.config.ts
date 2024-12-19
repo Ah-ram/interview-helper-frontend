@@ -8,11 +8,18 @@ export default defineNuxtConfig({
         },
         extendRoutes(routes, resolve) {
             // 페이지 파일이 있는 위치를 명시적으로 추가
-            routes.push({
-                name: 'board-list',
-                path: '/board/list',
-                component: resolve(__dirname, 'pages/list.vue'), // 게시판 목록 페이지
-            });
+            routes.push(
+                {
+                    name: 'board-list',
+                    path: '/board/list',
+                    component: resolve(__dirname, 'pages/BoardListPage.vue'), // 게시판 목록 페이지
+                },
+                {
+                    name: "board-read",
+                    path: "/board/read/:id",
+                    component: resolve(__dirname, "pages/BoardReadPage.vue"), // 게시판 읽기 페이지
+                },
+            );
         },
     },
 });

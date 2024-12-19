@@ -10,40 +10,30 @@
         </div>
 
         <!-- 데이터 테이블 -->
-        <v-data-table
-            v-model:items-per-page="perPage"
-            :headers="headerTitle"
-            :items="pagedItems"
-            v-model:pagination="pagination"
-            class="elevation-1"
-            @click:row="readRow"
-            item-value="boardId"
-            :items-per-page-options="[5, 10, 15]"
-        />
+        <v-data-table v-model:items-per-page="perPage" :headers="headerTitle" :items="pagedItems"
+            v-model:pagination="pagination" class="elevation-1" @click:row="readRow" item-value="id"
+            :items-per-page-options="[5, 10, 15]" />
 
         <!-- 페이지네이션 -->
-        <v-pagination
-            v-model="pagination.page"
-            :length="pageCount"
-            color="primary"
-            class="mt-4"
-        />
+        <v-pagination v-model="pagination.page" :length="pageCount" color="primary" class="mt-4" />
     </v-container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
 import { useBoardStore } from '../stores/boardStore';
+import { useRouter } from "#imports";
 
 export default defineComponent({
     setup() {
         const boardStore = useBoardStore(); // Pinia Store 사용
+        const router = useRouter();
 
         const perPage = ref(5); // 페이지당 아이템 수
         const pagination = ref({ page: 1 }); // 페이지네이션
 
         const headerTitle = [
-            { text: 'No', align: 'start', sortable: true, value: 'boardId' },
+            { text: 'No', align: 'start', sortable: true, value: 'id' },
             { text: '제목', align: 'start', value: 'title' },
             { text: '작성자', align: 'start', value: 'writer' },
             { text: '작성일자', align: 'start', value: 'regDate' },
@@ -67,14 +57,14 @@ export default defineComponent({
 
         // 게시물 클릭 시 처리
         const readRow = (event: MouseEvent, { item }: any) => {
-            console.log(`게시글 읽기: ${item.title}`);
-            // 게시물 상세 페이지로 이동하는 로직 추가 필요
+            console.log("item:", item.id);
+            router.push(`/board/read/${item.id}`);
         };
 
         // 컴포넌트가 마운트되었을 때 데이터 요청
         onMounted(async () => {
-            console.log('requestBoardListToDjango()')
-            await boardStore.requestBoardListToDjango(); // 서버로부터 데이터 요청
+            console.log('requestBoardListToSpring()')
+            await boardStore.requestBoardListToSpring(); // 서버로부터 데이터 요청
         });
 
         return {

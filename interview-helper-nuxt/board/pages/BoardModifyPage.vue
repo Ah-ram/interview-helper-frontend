@@ -1,31 +1,31 @@
 <template>
     <v-container>
-        <h2>Interview-helper 게시물 읽기</h2>
+        <h2>Interview-helper 게시물 수정</h2>
         <v-card>
             <v-card-title>게시물 정보</v-card-title>
             <v-card-text>
                 <v-container>
                     <v-row>
                         <v-col cols="12">
-                            <div><strong>제목:</strong> {{ title }}</div>
+                            <div><strong>제목</strong></div>
+                            <input type="text" id="board-title" v-model="title" required />
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="12">
-                            <div><strong>작성자:</strong> {{ writer }}</div>
+                            <div><strong>작성자</strong></div>
+                            <input type="text" id="board-writer" v-model="writer" required />
                         </v-col>
                     </v-row>
                     <v-row>
                         <v-col cols="12">
-                            <div><strong>내용:</strong> {{ content }}</div>
+                            <div><strong>내용</strong></div>
+                            <input type="text" id="board-content" v-model="content" required />
                         </v-col>
                     </v-row>
                     <v-row justify="end">
                         <v-col cols="auto">
-                            <v-btn color="primary" @click="goToBoardModifyPage">수정</v-btn>
-                        </v-col>
-                        <v-col cols="auto">
-                            <v-btn color="error" @click="onDelete">삭제</v-btn>
+                            <v-btn color="primary" @click="updateBoardToSpring">수정 완료</v-btn>
                         </v-col>
                         <v-col cols="auto">
                             <v-btn color="secondary" @click="goToBoardListpage">돌아가기</v-btn>
@@ -70,18 +70,19 @@ async function getBoardData() {
     }
 }
 
-function goToBoardModifyPage() {
-    router.push(`/board/modify/${id.value}`)
-}
-
 function goToBoardListpage() {
     router.push("/board/list")
 }
 
-const onDelete = async() => {
-    console.log('삭제 버튼 누름')
-    await boardStore.requestBoardDeleteToSpring(id.value)
-    await router.push("/board/list")
+async function updateBoardToSpring() {
+    try {
+        const res = await boardStore.requestUpdateBoardToSpring(id.value, title.value, content.value)
+        console.log("updateBoardToSpring() res:", res)
+        router.push(`/board/read/${id.value}`)
+    } catch (error) {
+        console.error("updateBoardToSpring() 중 에러 발생:", error)
+        throw error
+    }
 }
 
 onMounted(async () => {

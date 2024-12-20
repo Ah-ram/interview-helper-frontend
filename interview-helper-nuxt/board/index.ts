@@ -30,6 +30,13 @@ export default defineNuxtModule({
                     file: resolve(themeDir, "board/pages/BoardReadPage.vue")
                 }
             )
+            pages.push(
+                {
+                    name: "board-modify",
+                    path: "/board/modify/:id",
+                    file: resolve(themeDir, "board/pages/BoardModifyPage.vue")
+                }
+            )
         });
 
         nuxt.hook('imports:dirs', (dirs) => {

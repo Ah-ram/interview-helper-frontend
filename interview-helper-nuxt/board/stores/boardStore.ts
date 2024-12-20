@@ -53,6 +53,16 @@ export const useBoardStore = defineStore('boardStore', {
             } catch (error) {
                 console.error("requestBoardDeleteToSpring() 중 오류 발생:", error)
             }
+        },
+        async requestUpdateBoardToSpring(id: Number, title: String, content: String) {
+            const { springAxiosInst } = createAxiosInstances()
+
+            try {
+                const response = await springAxiosInst.put(`/board/modify/${id}`, { title, content })
+                console.log("requestUpdateBoardToSpring() response:", response)
+            } catch (error) { 
+                console.error("requestUpdateBoardToSpring() 중 오류 발생:", error)
+            }
         }
     }
 });

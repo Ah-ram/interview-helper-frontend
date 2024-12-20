@@ -42,8 +42,6 @@ export default defineComponent({
 
         const onSubmit = async() => {
             try {
-                console.log('작성 완료 버튼 누름')
-
                 const board = await boardStore.requestBoardCreateToSpring(postData.value);
                 router.push({ name: 'board-list' })
             } catch (error) {
@@ -52,7 +50,6 @@ export default defineComponent({
         };
 
         const onCancel = async() => {
-            console.log('취소 버튼 누름')
             router.back()
         };
 

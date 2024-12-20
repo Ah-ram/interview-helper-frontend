@@ -7,12 +7,11 @@ export const useBoardStore = defineStore('boardStore', {
     }),
 
     actions: {
-        async requestBoardListToDjango() {
+        async requestBoardListToSpring() {
             const { springAxiosInst } = createAxiosInstances();
 
             try {
                 const response = await springAxiosInst.get('/board/list');
-                console.log('요청옴?', response);
                 this.boards = response.data;
             } catch (error) {
                 console.error('게시글 목록을 불러오는 중 오류가 발생했습니다:', error);
@@ -31,6 +30,18 @@ export const useBoardStore = defineStore('boardStore', {
             } catch (error) {
                 console.error('requestBoardCreateToSPring 중 에러 발생:', error)
                 throw error
+            }
+        },
+        
+        async requestBoardToSpring(id: Number) {
+            const { springAxiosInst } = createAxiosInstances();
+
+            try {
+                const response = await springAxiosInst.get(`/board/read/${id}`)
+                console.log("requestBoardToSpring() response:", response);
+                return response.data;
+            } catch (error) {
+                console.error("requestBoardToSpring() 중 오류 발생:", error)
             }
         }
     }

@@ -46,7 +46,7 @@ const boardStore = useBoardStore();
 const route = useRoute();
 const router = useRouter();
 
-const id = ref(route.params.boardId)
+const id = ref(route.params.id)
 
 const title = ref("");
 const writer = ref("");

@@ -17,6 +17,21 @@ export const useBoardStore = defineStore('boardStore', {
             } catch (error) {
                 console.error('게시글 목록을 불러오는 중 오류가 발생했습니다:', error);
             }
+        },
+        
+        async requestBoardCreateToSpring(postData:{
+            title: string,
+            writer: string,
+            content: string
+        }) {
+            const { springAxiosInst } = createAxiosInstances();
+            try {
+                const response = await springAxiosInst.post('/board/create', postData);
+                return response.data;
+            } catch (error) {
+                console.error('requestBoardCreateToSPring 중 에러 발생:', error)
+                throw error
+            }
         }
     }
 });

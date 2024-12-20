@@ -14,7 +14,12 @@ export default defineNuxtModule({
             pages.push({
                 name: 'board-list',
                 path: '/board/list',
-                file: resolve(themeDir, 'board/pages/list.vue'),
+                file: resolve(themeDir, 'board/pages/BoardListPage.vue'),
+            });
+            pages.push({
+                name: 'board-register',
+                path: '/board/register',
+                file: resolve(themeDir, 'board/pages/BoardRegisterPage.vue'),
             });
         });
 

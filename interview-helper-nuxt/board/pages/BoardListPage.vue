@@ -34,10 +34,13 @@
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
 import { useBoardStore } from '../stores/boardStore';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
     setup() {
         const boardStore = useBoardStore(); // Pinia Store 사용
+
+        const router = useRouter();
 
         const perPage = ref(5); // 페이지당 아이템 수
         const pagination = ref({ page: 1 }); // 페이지네이션
@@ -62,7 +65,7 @@ export default defineComponent({
         // 게시물 작성 버튼 클릭
         const createPost = () => {
             console.log('게시물 작성 클릭');
-            // 게시물 작성 로직 추가 필요
+            router.push({ name: 'board-register' });
         };
 
         // 게시물 클릭 시 처리

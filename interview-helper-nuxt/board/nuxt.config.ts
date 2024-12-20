@@ -11,7 +11,12 @@ export default defineNuxtConfig({
             routes.push({
                 name: 'board-list',
                 path: '/board/list',
-                component: resolve(__dirname, 'pages/list.vue'), // 게시판 목록 페이지
+                component: resolve(__dirname, 'pages/BoardListPage.vue'), // 게시판 목록 페이지
+            });
+            routes.push({
+                name: 'board-register',
+                path: '/board/register',
+                component: resolve(__dirname, 'pages/BoardRegisterPage.vue'), // 게시판 목록 페이지
             });
         },
     },

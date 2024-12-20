@@ -25,7 +25,7 @@
                             <v-btn color="primary">수정</v-btn>
                         </v-col>
                         <v-col cols="auto">
-                            <v-btn color="error">삭제</v-btn>
+                            <v-btn color="error" @click="onDelete">삭제</v-btn>
                         </v-col>
                         <v-col cols="auto">
                             <v-btn color="secondary" @click="goToBoardListpage">돌아가기</v-btn>
@@ -72,6 +72,12 @@ async function getBoardData() {
 
 function goToBoardListpage() {
     router.push("/board/list")
+}
+
+const onDelete = async() => {
+    console.log('삭제 버튼 누름')
+    await boardStore.requestBoardDeleteToSpring(id.value)
+    await router.push("/board/list")
 }
 
 onMounted(async () => {

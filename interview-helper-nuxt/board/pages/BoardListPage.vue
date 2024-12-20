@@ -24,6 +24,7 @@ import { defineComponent, ref, computed, onMounted } from 'vue';
 import { useBoardStore } from '../stores/boardStore';
 import { useRouter } from "#imports";
 
+
 export default defineComponent({
     setup() {
         const boardStore = useBoardStore(); // Pinia Store 사용
@@ -32,12 +33,13 @@ export default defineComponent({
         const perPage = ref(5); // 페이지당 아이템 수
         const pagination = ref({ page: 1 }); // 페이지네이션
 
-        const headerTitle = [
-            { text: 'No', align: 'start', sortable: true, value: 'id' },
-            { text: '제목', align: 'start', value: 'title' },
-            { text: '작성자', align: 'start', value: 'writer' },
-            { text: '작성일자', align: 'start', value: 'createDate' },
-        ];
+
+        const headerTitle = ref([
+            { title: 'No', align: 'start', sortable: true, value: 'id' },
+            { title: '제목', align: 'start', value: 'title' },
+            { title: '작성자', align: 'start', value: 'writer' },
+            { title: '작성일자', align: 'start', value: 'updateDate' },
+        ]);
 
         // 페이지네이션에 따른 게시물 필터링
         const pagedItems = computed(() => {
@@ -52,7 +54,7 @@ export default defineComponent({
         // 게시물 작성 버튼 클릭
         const createPost = () => {
             console.log('게시물 작성 클릭');
-            // 게시물 작성 로직 추가 필요
+            router.push('/board/register');
         };
 
         // 게시물 클릭 시 처리

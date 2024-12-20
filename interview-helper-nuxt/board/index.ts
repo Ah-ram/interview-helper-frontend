@@ -16,13 +16,20 @@ export default defineNuxtModule({
                     name: 'board-list',
                     path: '/board/list',
                     file: resolve(themeDir, 'board/pages/BoardListPage.vue'),
-                },
+                });
+            pages.push(
+                {
+                    name: 'board-register',
+                    path: '/board/register',
+                    file: resolve(themeDir, 'board/pages/BoardRegisterPage.vue'),
+                });
+            pages.push(
                 {
                     name: "board-read",
                     path: "/board/read/:id",
                     file: resolve(themeDir, "board/pages/BoardReadPage.vue")
                 }
-            );
+            )
         });
 
         nuxt.hook('imports:dirs', (dirs) => {

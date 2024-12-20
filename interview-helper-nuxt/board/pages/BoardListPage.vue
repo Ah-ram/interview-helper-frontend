@@ -36,7 +36,7 @@ export default defineComponent({
             { text: 'No', align: 'start', sortable: true, value: 'id' },
             { text: '제목', align: 'start', value: 'title' },
             { text: '작성자', align: 'start', value: 'writer' },
-            { text: '작성일자', align: 'start', value: 'regDate' },
+            { text: '작성일자', align: 'start', value: 'createDate' },
         ];
 
         // 페이지네이션에 따른 게시물 필터링

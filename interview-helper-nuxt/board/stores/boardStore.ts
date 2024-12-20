@@ -32,7 +32,7 @@ export const useBoardStore = defineStore('boardStore', {
                 throw error
             }
         },
-        
+
         async requestBoardToSpring(id: Number) {
             const { springAxiosInst } = createAxiosInstances();
 
@@ -42,6 +42,16 @@ export const useBoardStore = defineStore('boardStore', {
                 return response.data;
             } catch (error) {
                 console.error("requestBoardToSpring() 중 오류 발생:", error)
+            }
+        },
+        async requestBoardDeleteToSpring(id: Number) {
+            const { springAxiosInst } = createAxiosInstances();
+
+            try {
+                const response = await springAxiosInst.delete(`/board/delete/${id}`)
+                return response.data;
+            } catch (error) {
+                console.error("requestBoardDeleteToSpring() 중 오류 발생:", error)
             }
         }
     }

@@ -12,11 +12,18 @@ export default defineComponent({
         const route = useRoute()
         const router = useRouter()
         const authenticationStore = useAuthenticationStore()
+        const code = route.query.code
+        const scope = route.query.scope
 
         async function setUserToken() {
-            const response = await authenticationStore.requestUserTokenToSpring()
-            console.log("setUserToken response:", response)
-            await localStorage.setItem('userToken', response.userToken)
+            console.log("code:", code)
+            const accessToken = await authenticationStore.requestGoogleAccessTokenToSpringRedirection(code)
+            console.log("accessToken:", accessToken)
+            const userinfo = await authenticationStore.requestGoogleUserinfoToSpring(accessToken)
+            console.log("userinfo:", userinfo)
+            console.log("userinfo id:", userinfo.id)
+            const userToken = await authenticationStore.requestUserTokenToSpring(userinfo)
+            localStorage.setItem('userToken', userToken)
             router.push('/')
         }
 

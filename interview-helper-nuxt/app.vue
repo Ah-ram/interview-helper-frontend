@@ -7,31 +7,33 @@
                         <span>BOARD</span>
                     </v-btn>
 
-                    <v-btn v-if="isAuthenticated" @click="goToGoogleLogin" alt="GoogleLogin">
+                    <v-btn v-if="isAuthenticated == false" @click="goToGoogleLogin" alt="GoogleLogin">
                         <span>LOGIN</span>
                     </v-btn>
 
-                    <v-btn v-else @click="goToGoogleLogout" alt="GoogleLogout">
+                    <v-btn v-if="isAuthenticated == true" @click="goToGoogleLogout" alt="GoogleLogout">
                         <span>LOGOUT</span>
                     </v-btn>
                 </v-spacer>
             </v-app-bar>
-            <NuxtPage/>
-<!--            <NuxtLink to="/">Home</NuxtLink>-->
+            <NuxtPage />
+            <!--            <NuxtLink to="/">Home</NuxtLink>-->
         </v-main>
     </v-app>
 </template>
 
-<script setup>
+<script>
 // import router from '~/router/index.ts'
 import { defineComponent, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useAuthenticationStore } from './authentication/stores/authenticationStore';
 
 export default defineComponent({
     setup() {
         const route = useRoute()
         const router = useRouter()
-        
+        const authenticationStore = useAuthenticationStore()
+
         const isScrolled = computed(() => {
             if (path.value !== '/') {
                 return false;
@@ -51,8 +53,9 @@ export default defineComponent({
             await authenticationStore.requestGoogleOauthRedirectionToSpring();
         }
 
-        function goToGoogleLogout() {
-            router.push("/oauth/logout")
+        async function goToGoogleLogout() {
+            await authenticationStore.requestGoogleLogoutToSpring();
+            router.push("/")
         }
 
         function handleScroll() {
@@ -61,7 +64,6 @@ export default defineComponent({
 
         onMounted(async () => {
             if (authenticationStore.isAuthenticated != undefined) {
-                await authenticationStore.requestUserTokenValidationToSpring()
 
                 if (!authenticationStore.isAuthenticated) {
                     localStorage.removeItem('userToken')
@@ -88,5 +90,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -8,7 +8,7 @@ export function createAxiosInstances() {
         const config = useRuntimeConfig();
         springAxiosInst = axios.create({
             baseURL: config.public.MAIN_API_URL,
-            timeout: 2500,
+            timeout: 10000,
         });
         console.log("Spring API URL:", config.public.MAIN_API_URL);
 

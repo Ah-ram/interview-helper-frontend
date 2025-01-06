@@ -1,17 +1,26 @@
 <template>
     <v-app>
         <v-main>
-            <v-app-bar class="navigationbar" :class="{ 'scrolled': isScrolled }" :height="isScrolled ? 50 : 70">
+            <v-app-bar class="navigationbar" :class="{ 'scrolled': isScrolled }" :height="isScrolled ? 50 : 70" color="#1a1a1a" elevation="0">
                 <v-spacer>
-                    <v-btn @click="goToBoardList" alt="BOARD">
+                    <v-btn class="btn-text">
+                        <span>INTERVIEW-HELPER</span>
+                    </v-btn>
+                </v-spacer>
+
+                <v-spacer align="right">
+                    <v-btn class="btn-text" @click="goToInterview" alt="INTERVIEW">
+                        <span>INTERVIEW</span>
+                    </v-btn>
+                    <v-btn class="btn-text" @click="goToBoardList" alt="BOARD">
                         <span>BOARD</span>
                     </v-btn>
 
-                    <v-btn v-if="isAuthenticated == false" @click="goToGoogleLogin" alt="GoogleLogin">
+                    <v-btn class="btn-text" v-if="isAuthenticated == false" @click="goToGoogleLogin" alt="GoogleLogin">
                         <span>LOGIN</span>
                     </v-btn>
 
-                    <v-btn v-if="isAuthenticated == true" @click="goToGoogleLogout" alt="GoogleLogout">
+                    <v-btn class="btn-text" v-if="isAuthenticated == true" @click="goToGoogleLogout" alt="GoogleLogout">
                         <span>LOGOUT</span>
                     </v-btn>
                 </v-spacer>
@@ -49,6 +58,10 @@ export default defineComponent({
             router.push("/board/list")
         }
 
+        function goToInterview() {
+            router.push("/interview/category")
+        }
+
         async function goToGoogleLogin() {
             await authenticationStore.requestGoogleOauthRedirectionToSpring();
         }
@@ -82,6 +95,7 @@ export default defineComponent({
             isAuthenticated,
 
             goToBoardList,
+            goToInterview,
             goToGoogleLogin,
             goToGoogleLogout,
             handleScroll,
@@ -90,4 +104,10 @@ export default defineComponent({
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.btn-text {
+    color: white;
+    font-size: 0.75rem;
+}
+
+</style>

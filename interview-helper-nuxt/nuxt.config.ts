@@ -3,7 +3,7 @@ import { defineNuxtConfig } from 'nuxt/config';
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  extends: ['./board/nuxt.config.ts', './authentication/nuxt.config.ts', './interview/nuxt.config.ts'],
+  extends: ['./board/nuxt.config.ts', './authentication/nuxt.config.ts', './interview/nuxt.config.ts', './user_profile/nuxt.config.ts'],
 
   css: [
     'vuetify/styles',
@@ -27,6 +27,7 @@ export default defineNuxtConfig({
       '~/board/index.ts',
       '~/authentication/index.ts',
       '~/interview/index.ts',
+      '~/user_profile/index.ts',
   ],
 
   imports: {

@@ -2,41 +2,19 @@
     <div class="container">
       <!-- 초기 카테고리 선택 화면 -->
       <template v-if="showQuestions == null">
-        <InterviewCategory @click-question="generateQuestions" />
+        <InterviewCategory 
+        :categories="categories"
+        @click-question="generateQuestions" />
       </template>
   
       <!-- 질문 생성 후 화면 -->
       <template v-else>
-        <div class="questions-view">
-          <div class="category-header">
-            <div class="selected-category">
-              <button @click="toggleDropdown" class="dropdown-button">
-                <span class="category-icon">{{ selectedCategory.icon }}</span>
-                <span class="category-label">{{ selectedCategory.label }}</span>
-                <span class="dropdown-arrow" :class="{ 'open': isDropdownOpen }">▼</span>
-              </button>
-  
-              <div v-if="isDropdownOpen" class="dropdown-menu">
-                <button
-                  v-for="category in categories"
-                  :key="category.id"
-                  @click="changeCategory(category)"
-                  :class="['dropdown-item', { active: selectedCategory?.id === category.id }]"
-                >
-                  <span class="category-icon">{{ category.icon }}</span>
-                  <span class="category-label">{{ category.label }}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-  
-          <div class="questions-container">
-            <div v-for="(question, index) in generatedQuestions" :key="index" class="question-card">
-              <h3>질문 {{ index + 1 }}</h3>
-              <p>{{ question }}</p>
-            </div>
-          </div>
-        </div>
+        <QuestionsView
+          :selected-category="selectedCategory"
+          :generated-questions="questions"
+          :categories="categories"
+          @update-category="changeCategory"
+          />
       </template>
     </div>
   </template>
@@ -44,12 +22,12 @@
   <script setup>
   import { ref } from 'vue';
   import InterviewCategory from '../components/InterviewCategory.vue';
-  
+  import QuestionsView from '../components/QuestionsView.vue';
  
   const showQuestions = ref(null);
-  const isDropdownOpen = ref(false);
   const generatedQuestions = ref([]);
   const selectedCategory = ref(null);
+  const questions = ref([])
   
   const categories = [
     { id: 'technical', label: '기술 역량', icon: '🎨' },
@@ -59,27 +37,21 @@
     { id: 'introduction', label: '자기 소개 및 동기', icon: '💭' },
   ];
 
-  const toggleDropdown = () => {
-    isDropdownOpen.value = !isDropdownOpen.value;
-  };
   
   const changeCategory = (category) => {
     selectedCategory.value = category;
-    isDropdownOpen.value = false;
     generateQuestions(category);
   };
   
   const generateQuestions = (value) => {
     // 실제 구현에서는 API 호출 등을 통해 질문을 생성하면 됩니다
-    generatedQuestions.value = [
+    questions.value = [
       '이것은 생성된 첫 번째 질문입니다.',
       '이것은 생성된 두 번째 질문입니다.',
       '이것은 생성된 세 번째 질문입니다.'
     ];
-    console.log("Value:", value)
-    showQuestions.value = value;
+    showQuestions.value = true;
     selectedCategory.value = value;
-    isDropdownOpen.value = false;
   };
   </script>
   

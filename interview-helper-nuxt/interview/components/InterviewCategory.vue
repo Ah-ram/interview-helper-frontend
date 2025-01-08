@@ -19,20 +19,14 @@
   </template>
 
 <script setup>
+
+defineProps(['categories']);
 const emit = defineEmits(['click-question']);
 const selectedCategory = ref(null);
 
 const generateQuestions = () => {
     emit("click-question", selectedCategory.value);
 }
-
-const categories = [
-    { id: 'technical', label: '기술 역량', icon: '🎨' },
-    { id: 'project', label: '프로젝트 경험', icon: '👁️' },
-    { id: 'problem-solving', label: '문제 해결', icon: '📝' },
-    { id: 'communication', label: '커뮤니케이션', icon: '💡' },
-    { id: 'introduction', label: '자기 소개 및 동기', icon: '💭' },
-];
 
 const selectCategory = (category) => {
     selectedCategory.value = category;

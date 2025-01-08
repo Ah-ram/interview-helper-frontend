@@ -24,6 +24,7 @@ export default defineComponent({
             console.log("userinfo id:", userinfo.id)
             const userToken = await authenticationStore.requestUserTokenToSpring(userinfo)
             localStorage.setItem('userToken', userToken)
+            authenticationStore.isAuthenticated = true
             router.push('/')
         }
 

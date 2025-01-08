@@ -15,6 +15,11 @@ export default defineNuxtModule({
                 path: "/user-profile",
                 file: resolve(themeDir, "user_profile/pages/UserProfile.vue"),
             })
+            pages.push({
+                name: "my-info",
+                path: "/user-profile/info",
+                file: resolve(themeDir, "user_profile/pages/MyInfo.vue"),
+            })
         })
 
         nuxt.hook("imports:dirs", (dirs) => {

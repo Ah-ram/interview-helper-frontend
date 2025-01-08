@@ -22,7 +22,6 @@ export const authenticationActions = {
             const response = await springAxiosInst.post("/oauth/google/access-token",
                 { code: code }, { headers: { 'Content-Type': 'application/json' } })
             console.log("requestGoogleAccessTokenToSpringRedirection() response:", response)
-            authenticationStore.isAuthenticated = true
             return response.data
         } catch (error) {
             console.error("requestGoogleAccessTokenToSpringRedirection() 중 오류 발생:", error)

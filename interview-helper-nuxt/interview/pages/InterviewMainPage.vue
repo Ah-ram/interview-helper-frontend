@@ -23,11 +23,14 @@
   import { ref } from 'vue';
   import InterviewCategory from '../components/InterviewCategory.vue';
   import QuestionsView from '../components/QuestionsView.vue';
+  import { useInterviewStore } from '../stores/interviewStore';
  
   const showQuestions = ref(null);
   const generatedQuestions = ref([]);
   const selectedCategory = ref(null);
   const questions = ref([])
+
+  const interviewStore = useInterviewStore()
   
   const categories = [
     { id: 'technical', label: '기술 역량', icon: '🎨' },
@@ -43,13 +46,13 @@
     generateQuestions(category);
   };
   
-  const generateQuestions = (value) => {
+  const generateQuestions = async (value) => {
     // 실제 구현에서는 API 호출 등을 통해 질문을 생성하면 됩니다
-    questions.value = [
-      '이것은 생성된 첫 번째 질문입니다.',
-      '이것은 생성된 두 번째 질문입니다.',
-      '이것은 생성된 세 번째 질문입니다.'
-    ];
+    const response = await interviewStore.requestGenerateQuestionsToFastAPI(value.label)
+
+    if (response == true) {
+      questions.value = await interviewStore.requestGeneratedQuestionsResultToFastAPI()
+    }
     showQuestions.value = true;
     selectedCategory.value = value;
   };

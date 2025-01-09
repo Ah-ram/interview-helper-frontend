@@ -16,5 +16,17 @@ export const useInterviewStore = defineStore('interviewStore', {
                 console.error('requestGenerateQuestionsToFastAPI() 중 에러 발생: ', error);
             }
         },
+        async requestGeneratedQuestionsResultToFastAPI() {
+            const { fastapiAxiosInst } = createAxiosInstances()
+
+            try {
+                const userToken = localStorage.getItem("userToken")
+                const response = await fastapiAxiosInst.post("/generate-questions-result", { userToken })
+                
+                return response.data.message;
+            } catch (error) {
+                console.error("requestGeneratedQuestionsResultToFastAPI() 중 에러 발생: ", error)
+            }
+        },
     }
 });

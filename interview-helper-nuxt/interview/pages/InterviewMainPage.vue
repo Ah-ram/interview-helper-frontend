@@ -49,6 +49,10 @@
   const generateQuestions = async (value) => {
     // 실제 구현에서는 API 호출 등을 통해 질문을 생성하면 됩니다
     const response = await interviewStore.requestGenerateQuestionsToFastAPI(value.label)
+
+    if (response == true) {
+      questions.value = await interviewStore.requestGeneratedQuestionsResultToFastAPI()
+    }
     showQuestions.value = true;
     selectedCategory.value = value;
   };

@@ -38,6 +38,9 @@ export default defineNuxtConfig({
     public: {
       MAIN_API_URL: process.env.NUXT_PUBLIC_BASE_URL,
       AI_BASE_URL: process.env.NUXT_PUBLIC_AI_BASE_URL,
+      AWS_REGION: process.env.NUXT_PUBLIC_AWS_REGION,
+      AWS_S3_IDENTITY_POOL: process.env.NUXT_PUBLIC_AWS_S3_IDENTITY_POOL_ID,
+      BUCKET_NAME: process.env.NUXT_PUBLIC_AWS_S3_BUCKET_NAME,
     },
   },
 })

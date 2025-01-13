@@ -1,15 +1,12 @@
 import { defineStore } from 'pinia'
 import { createAxiosInstances } from '../../utility/axiosInstance'
 
-interface UserInfo {
-  email: string
-  name: string
-}
-
 export const useUserProfileStore = defineStore('userProfileStore', {
-    state: () => ({}),
+    state: () => ({
+      changedUserProfile: false
+    }),
     actions: {
-      async requestUserInfoToSpring(): Promise<void> {
+      async requestUserInfoToSpring(): Promise<any> {
         const { springAxiosInst } = createAxiosInstances()
   
         try {
@@ -47,6 +44,18 @@ export const useUserProfileStore = defineStore('userProfileStore', {
         } catch (error) {
           console.error('requestChangeNicknameToSpring() 중 에러 발생:', error)
           throw error
+        }
+      },
+      async requestChangePictureToSpring(imageUrl: string) {
+        const { springAxiosInst } = createAxiosInstances()
+
+        try {
+          const userToken = localStorage.getItem('userToken')
+          const payload = { userToken: userToken, imageUrl: imageUrl }
+          const response = await springAxiosInst.put('/user-profile/change-picture', payload)
+          return response.data
+        } catch (error) {
+          console.error('requestChangePictureToSpring 중 에러 발생: ', error)
         }
       },
     }

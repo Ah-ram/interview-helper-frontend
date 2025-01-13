@@ -1,7 +1,7 @@
 <template>
     <v-app-bar class="navigationbar" :class="{ 'scrolled': isScrolled }" :height="isScrolled ? 50 : 70" color="#1a1a1a" elevation="0">
         <v-spacer>
-            <v-btn class="btn-text">
+            <v-btn class="btn-text" @click="goToHome" alt="HOME">
                 <span>INTERVIEW-HELPER</span>
             </v-btn>
         </v-spacer>
@@ -50,6 +50,10 @@ export default defineComponent({
         const Yscrolled = ref(0)
         const userPicture = ref(null)
 
+        function goToHome() {
+            router.push("/")
+        }
+
         function goToBoardList() {
             router.push("/board/list")
         }
@@ -86,14 +90,15 @@ export default defineComponent({
             window.removeEventListener('scroll', handleScroll)
         })
 
-        watch(() => authenticationStore.isAuthenticated,
-            async (newVal) => {
-                if (newVal === true) {
+        watch(() => [authenticationStore.isAuthenticated, userProfileStore.changedUserProfile],
+            async ([newValA, newValB]) => {
+                if (newValA === true || newValB === true) {
                     try {
                         const response = await userProfileStore.requestUserInfoToSpring()
                         console.log("picture: ", response.picture)
                         userPicture.value = response.picture
                         console.log("userPicture.value: ", userPicture.value)
+                        userProfileStore.changedUserProfile = false
                     } catch (error) {
                         console.error("UserPicture 가져오는 중 에러 발생: ", error)
                     }
@@ -106,6 +111,7 @@ export default defineComponent({
             isAuthenticated,
             userPicture,
 
+            goToHome,
             goToBoardList,
             goToInterview,
             goToGoogleLogin,

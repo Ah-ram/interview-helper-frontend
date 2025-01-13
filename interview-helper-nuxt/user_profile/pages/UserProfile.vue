@@ -81,15 +81,15 @@ onMounted(async () => {
     margin: 0 auto;
     padding: 100px;
     min-height: 100vh;
-    background-color: #f5f5f5;
+    background-color: #1a1a1a;
 }
 
 .profile-section {
-    background: white;
+    background: #1e1e1e;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .profile-header {
@@ -119,13 +119,14 @@ onMounted(async () => {
 }
 
 .profile-text h1 {
+    color: white;
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
 .profile-text p {
-    color: #666;
+    color: #aaaaaa;
 }
 
 .button-grid {
@@ -135,18 +136,18 @@ onMounted(async () => {
 }
 
 .menu-button {
-    background: white;
+    background: #242424;
     border-radius: 10px;
     padding: 20px;
     text-decoration: none;
     color: inherit;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .menu-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .button-content {
@@ -154,6 +155,7 @@ onMounted(async () => {
 }
 
 .button-content h3 {
+    color: white;
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -163,36 +165,16 @@ onMounted(async () => {
 }
 
 .arrow {
-    color: #999;
+    color: #bbbbbb;
 }
 
 .button-content p {
     font-size: 14px;
-    color: #666;
-}
-
-@media (max-width: 768px) {
-    .button-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .profile-header {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .profile-info {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .logout-button {
-        margin-top: 10px;
-    }
+    color: #aaaaaa;
 }
 
 .logout-button {
-    background: rgb(225, 225, 225);
+    background: #2563eb;
     border: none;           
     border-radius: 10px;
     margin-right: 15px;

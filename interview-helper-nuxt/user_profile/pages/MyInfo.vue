@@ -1,154 +1,201 @@
 <template>
-    <div class="profile-container">
-      <div class="profile-image-container">
-        <div class="profile-image">
-          <img 
-            :src="userInfo.picture" 
-            alt="프로필 이미지"
-            class="rounded-image"
-          />
-          <button class="edit-image-btn" @click="handleImageChange">
-            <span class="pencil-icon">✎</span>
-          </button>
-        </div>
+  <div class="page-wrapper">
+    <div class="mypage-container">
+      <div class="profile-section">
+          <div class="profile-layout">
+              <div class="profile-image-container">
+                  <ProfileImageEdit
+                      :current-profile-image="userInfo.picture"
+                  />
+              </div>
+              
+              <div class="info-content">
+                  <div class="tab-navigation">
+                      <button class="tab-button active">
+                          회원 정보
+                      </button>
+                  </div>
+                  
+                  <div class="profile-details">
+                      <div class="info-row">
+                          <div class="info-label">이메일</div>
+                          <div class="info-value disabled">
+                              {{ userInfo.email }}
+                          </div>
+                      </div>
+                      
+                      <div class="info-row">
+                          <div class="info-label">닉네임</div>
+                          <NicknameEdit
+                              :current-nickname="userInfo.nickname"
+                              @update:nickname="handleNicknameChange"
+                          />
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-      
-      <div class="profile-info">
-        <div class="email-section">
-          <span class="email">{{ userInfo.email }}</span>
-        </div>
-        
-        <div class="nickname-section">
-          <span class="nickname">{{ userInfo.nickname }}</span>
-          <button class="edit-nickname-btn" @click="handleNicknameChange">
-            변경
-          </button>
-        </div>
-      </div>
-    </div>
-  </template>
+  </div>
+  </div>
+</template>
 
-  <script setup>
-  import { ref, onMounted } from 'vue'
-  import { useRoute, useRouter } from 'vue-router';
-  import { useUserProfileStore } from '../stores/UserProfileStore';
-  
-  const userProfileStore = useUserProfileStore();
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useUserProfileStore } from '../stores/UserProfileStore';
+import NicknameEdit from '../components/NicknameEdit.vue';
+import ProfileImageEdit from '../components/ProfileImageEdit.vue';
 
-  const userInfo = ref({
-    nickname: '',
-    email: '',
-    picture: ''
-  })
+const userProfileStore = useUserProfileStore();
 
-  const getUserInfo = async () => {
-    const response = await userProfileStore.requestUserInfoToSpring()
-    userInfo.value = {
-        nickname: response.nickname || null,
-        email: response.email || null,
-        picture: response.picture 
-    }
+const userInfo = ref({
+  nickname: '',
+  email: '',
+  picture: ''
+})
+
+const getUserInfo = async () => {
+  const response = await userProfileStore.requestUserInfoToSpring()
+  userInfo.value = {
+      nickname: response.nickname || null,
+      email: response.email || null,
+      picture: response.picture 
   }
+}
 
-  async function handleImageChange(picture) {
-
-  }
-
-  async function handleNicknameChange(nickname) {
-    
-  }
-
-
-  onMounted(async () => {
-    await getUserInfo();
-  })
-  </script>
-  
-  <style scoped>
-  .profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
+async function handleNicknameChange(newNickname) {
+  try {
+    await userProfileStore.requestChangeNicknameToSpring(newNickname)
+    userInfo.value.nickname = newNickname
+  } catch (error) {
+    console.error('닉네임 변경 실패:', error)
+    throw new Error('이미 사용 중인 닉네임입니다.')
   }
   
-  .profile-image-container {
-    position: relative;
-    margin-bottom: 1.5rem;
-  }
+}
+
+
+onMounted(async () => {
+  await getUserInfo();
+})
+</script>
   
-  .profile-image {
-    position: relative;
-    width: 120px;
-    height: 120px;
-  }
-  
-  .rounded-image {
+<style scoped>
+.page-wrapper {
+  background-color: #1a1a1a;
+  min-height: 100hv;
+  width: 100%;
+}
+
+.mypage-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    min-height: 100vh;
+    background-color: #1a1a1a;
+}
+
+.profile-section {
+    background: #1e1e1e;
+    border-radius: 8px;
     width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .edit-image-btn {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    cursor: pointer;
+}
+
+.profile-layout {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  .pencil-icon {
+    gap: 80px;
+    align-items: flex-start;
+    padding: 0 20px;
+}
+
+.profile-image-container {
+    flex: 0 0 300px;
+    margin-top: 40px; /* 상단 여백 추가 */
+}
+
+.info-content {
+    flex: 1;
+}
+
+.tab-navigation {
+    display: flex;
+    border-bottom: 1px solid #404040;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.tab-button {
+    padding: 16px 24px;
     font-size: 16px;
-    color: #666666;
-  }
-  
-  .profile-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .email-section {
-    margin-bottom: 0.5rem;
-  }
-  
-  .email {
-    font-size: 0.9rem;
-    color: #666666;
-  }
-  
-  .nickname-section {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .nickname {
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-  
-  .edit-nickname-btn {
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    background-color: #f5f5f5;
-    border: 1px solid #e0e0e0;
-    font-size: 0.8rem;
+    color: #a0a0a0;
+    background: none;
+    border: none;
     cursor: pointer;
-    color: #333333;
-  }
-  
-  .edit-nickname-btn:hover {
-    background-color: #eeeeee;
-  }
-  </style>
+    position: relative;
+}
+
+.tab-button.active {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #2563eb;
+}
+
+.profile-details {
+    width: 80%;
+    margin-left: 40px;
+}
+
+.info-row {
+    display: flex;
+    padding: 24px 0;
+    border-bottom: 1px solid #404040;
+}
+
+.info-label {
+    width: 120px;
+    color: #aaaaaa;
+    font-weight: 500;
+}
+
+.info-value {
+    flex: 1;
+    color: #ffffff;
+}
+
+.info-value.disabled {
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .profile-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-image-container {
+        margin-bottom: 24px;
+    }
+
+    .right-content {
+        width: 100%;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .info-label {
+        width: 100%;
+    }
+}
+</style>

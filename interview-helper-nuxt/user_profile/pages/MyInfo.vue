@@ -102,7 +102,7 @@ onMounted(async () => {
 
 .profile-layout {
     display: flex;
-    gap: 80px;
+    gap: 100px;
     align-items: flex-start;
     padding: 0 20px;
 }

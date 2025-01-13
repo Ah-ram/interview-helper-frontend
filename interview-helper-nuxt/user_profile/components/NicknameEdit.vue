@@ -2,7 +2,7 @@
     <div class="nickname-section">
         <div v-if="!isEditing" class="input-group">
             <span class="nickname">{{ currentNickname }}</span>
-            <button @click="startEditing" class="edit-nickname-btn">변경</button>
+            <button @click="startEditing" class="edit-nickname-btn start">변경</button>
         </div>
         <div v-else class="edit-mode-container">
             <div class="input-group">
@@ -13,38 +13,36 @@
                     :class="{ 'error': hasError }"
                     :disabled="isChecking"
                 />
-                <button
-                    v-if="!isNicknameChecked"
-                    @click="checkNicknameDuplicate"
-                    class="check-btn"
-                    :disabled="!isValidLength || isChecking || newNickname === currentNickname"
-                >
-                    {{ isChecking ? '확인중...' : '중복확인' }}
-                </button>
-                <button
-                    v-if="!isNicknameChecked"
-                    @click="cancelEditing"
-                    class="edit-nickname-btn cancel"
-                >
-                    취소
-                </button>
+                <div class="action-btn">
+
+                    <button
+                        v-if="!isNicknameChecked"
+                        @click="checkNicknameDuplicate"
+                        class="check-btn"
+                        :disabled="!isValidLength || isChecking || newNickname === currentNickname"
+                    >
+                        {{ isChecking ? '확인중...' : '중복확인' }}
+                    </button>
+                    <button 
+                        v-if="isNicknameChecked"
+                        @click="handleSubmit"
+                        class="edit-nickname-btn submit"
+                        :disabled="!canSubmit"
+                    >
+                        변경
+                    </button>
+                    <button
+                        @click="cancelEditing"
+                        class="edit-nickname-btn cancel"
+                    >
+                        취소
+                    </button>
+                </div>
             </div>
             <!--중복확인 성공 시 변경 버튼 표시-->
             <div v-if="isNicknameChecked" class="success-group">
+                    
                 <span class="check-success">✓ 사용 가능한 닉네임입니다</span>
-                <button 
-                    @click="handleSubmit"
-                    class="edit-nickname-btn submit"
-                    :disabled="!canSubmit"
-                >
-                    변경
-                </button>
-                <button
-                    @click="cancelEditing"
-                    class="edit-nickname-btn cancel"
-                >
-                    취소
-                </button>
             </div>
             <p v-if="hasError" class="error-message">{{ errorMessage }}</p>
         </div>
@@ -161,21 +159,19 @@
 .input-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .edit-mode-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1rem;
     width: 100%;
 }
 
 .success-group {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .nickname-input {
@@ -194,6 +190,11 @@
 
 .nickname-input.error {
   border-color: #f44336;
+}
+
+.action-btn {
+    display: flex;
+    gap: 0.75rem;
 }
 
 .check-btn {
@@ -227,8 +228,11 @@
   font-weight: 500;
 }
 
+.edit-nickname-btn.start {
+    margin-left: 300px;
+}
+
 .edit-nickname-btn {
-  margin-left: 300px;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
   background-color: #f5f5f5;

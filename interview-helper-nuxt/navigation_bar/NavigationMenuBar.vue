@@ -1,7 +1,7 @@
 <template>
     <v-app-bar class="navigationbar" :class="{ 'scrolled': isScrolled }" :height="isScrolled ? 50 : 70" color="#1a1a1a" elevation="0">
         <v-spacer>
-            <v-btn class="btn-text">
+            <v-btn class="btn-text" @click="goToHome" alt="HOME">
                 <span>INTERVIEW-HELPER</span>
             </v-btn>
         </v-spacer>
@@ -49,6 +49,10 @@ export default defineComponent({
         const path = computed(() => route.path)
         const Yscrolled = ref(0)
         const userPicture = ref(null)
+
+        function goToHome() {
+            router.push("/")
+        }
 
         function goToBoardList() {
             router.push("/board/list")
@@ -106,6 +110,7 @@ export default defineComponent({
             isAuthenticated,
             userPicture,
 
+            goToHome,
             goToBoardList,
             goToInterview,
             goToGoogleLogin,

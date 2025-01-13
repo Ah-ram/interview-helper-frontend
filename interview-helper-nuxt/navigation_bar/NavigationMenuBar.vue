@@ -90,14 +90,15 @@ export default defineComponent({
             window.removeEventListener('scroll', handleScroll)
         })
 
-        watch(() => authenticationStore.isAuthenticated,
-            async (newVal) => {
-                if (newVal === true) {
+        watch(() => [authenticationStore.isAuthenticated, userProfileStore.changedUserProfile],
+            async ([newValA, newValB]) => {
+                if (newValA === true || newValB === true) {
                     try {
                         const response = await userProfileStore.requestUserInfoToSpring()
                         console.log("picture: ", response.picture)
                         userPicture.value = response.picture
                         console.log("userPicture.value: ", userPicture.value)
+                        userProfileStore.changedUserProfile = false
                     } catch (error) {
                         console.error("UserPicture 가져오는 중 에러 발생: ", error)
                     }

@@ -61,7 +61,7 @@
   <style scoped>
   .container {
     min-height: 100vh;
-    background-color: #1a1a1a;
+    background-color: #121212;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -86,7 +86,7 @@
   .category-header {
     position: sticky;
     top: 0;
-    background-color: #1a1a1a;
+    background-color: #121212;
     padding: 1rem 0;
     margin-bottom: 2rem;
     z-index: 10;

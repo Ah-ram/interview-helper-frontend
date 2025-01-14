@@ -21,24 +21,40 @@
                 </div>
             </div>
         </div>
-  
-        <div class="questions-container">
-            <div v-for="(question, index) in generatedQuestions" :key="index" class="question-card">
-                <h3>질문 {{ index + 1 }}</h3>
-                <p>{{ question }}</p>
-            </div>
+        <div class="question-section">
+          <button
+            class="nav-button prev"
+            @click="prevQuestion"
+            :disabled="currentIndex === 0"
+          >
+            <
+          </button>
+          <div class="questions-container">
+              <div v-if="generatedQuestions.length > 0" class="question-card">
+                  <h3>질문 {{ currentIndex + 1 }}</h3>
+                  <h1>{{ generatedQuestions[currentIndex] }}</h1>
+              </div>
+          </div>
+          <button
+            class="nav-button next"
+            @click="nextQuestion"
+            :disabled="currentIndex === generatedQuestions.length - 1"
+          >
+            >
+          </button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-defineProps(['selectedCategory', 'generatedQuestions', 'categories'])
+const props = defineProps(['selectedCategory', 'generatedQuestions', 'categories'])
 
 const emit = defineEmits(['update-category'])
 
 const isDropdownOpen = ref(false);
+const currentIndex = ref(0);
 
 const toggleDropdown = () => {
     isDropdownOpen.value = !isDropdownOpen.value;
@@ -48,22 +64,36 @@ const changeCategory = (category) => {
     emit('update-category', category);
     isDropdownOpen.value = false;
 }
+
+const nextQuestion = () => {
+  if (currentIndex.value < props.generatedQuestions.length - 1) {
+    currentIndex.value++
+  }
+}
+
+const prevQuestion = () => {
+  if (currentIndex.value > 0) {
+    currentIndex.value--
+  }
+}
+
 </script>
 
-<style>
-/* 질문 생성 후 추가되는 스타일 */
+<style scoped> 
 .questions-view {
     width: 100%;
     max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
   }
   
   .category-header {
-    position: sticky;
+    /* position: sticky;
     top: 0;
-    background-color: #1a1a1a;
-    padding: 1rem 0;
-    margin-bottom: 2rem;
-    z-index: 10;
+    background-color: #121212;
+    padding: 1rem 0; */
+    margin-bottom: 3rem;
+    /* z-index: 10; */
   }
   
   .selected-category {
@@ -78,7 +108,7 @@ const changeCategory = (category) => {
     align-items: center;
     gap: 0.5rem;
     background-color: #2a2a2a;
-    border: none;
+    border: 1px solid #404040;
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
     color: white;
@@ -124,23 +154,61 @@ const changeCategory = (category) => {
   .dropdown-item.active {
     background-color: #2563eb;
   }
+
+  .question-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .nav-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #2a2a2a;
+    border: 1px solid #404040;
+    border-radius: 0.75rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .nav-button:hover:not(:disabled) {
+    background-color: #3a3a3a;
+  }
+
+  .nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   
   .questions-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    flex: 1;
+    min-height: 200px;
   }
   
   .question-card {
     background-color: #2a2a2a;
-    border-radius: 0.75rem;
-    padding: 1rem;
-    color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+
   }
   
   .question-card h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
     color: #9ca3af;
   }
+
+  .question-card h1 {
+    font-size: 1.8rem;
+    color: white;
+    margin-bottom: 20px;
+  }
+
+ 
 </style>

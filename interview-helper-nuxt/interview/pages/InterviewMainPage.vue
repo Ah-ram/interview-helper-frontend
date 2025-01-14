@@ -13,7 +13,8 @@
           :selected-category="selectedCategory"
           :generated-questions="questions"
           :categories="categories"
-          @update-category="changeCategory"
+          @change-category="changeCategory"
+          @update-category="updateCategory"
           />
       </template>
     </div>
@@ -43,8 +44,11 @@
   
   const changeCategory = (category) => {
     selectedCategory.value = category;
-    generateQuestions(category);
   };
+
+  const updateCategory = async (category) => {
+    await generateQuestions(category);
+  }
   
   const generateQuestions = async (value) => {
     // 실제 구현에서는 API 호출 등을 통해 질문을 생성하면 됩니다

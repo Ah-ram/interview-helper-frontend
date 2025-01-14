@@ -1,12 +1,22 @@
 <template>
-    <div class="questions-view">
-        <div class="category-header">
-            <div class="selected-category">
-                <button @click="toggleDropdown" class="dropdown-button">
-                    <span class="category-icon">{{ selectedCategory.icon }}</span>
-                    <span class="category-label">{{ selectedCategory.label }}</span>
-                    <span class="dropdown-arrow" :class="{ 'open': isDropdownOpen }">▼</span>
-                </button>
+  <div class="questions-view">
+    <div class="category-header">
+      <div class="selected-category">
+        <button @click="toggleDropdown" class="dropdown-button">
+          <span class="category-icon">{{ selectedCategory.icon }}</span>
+          <span class="category-label">{{ selectedCategory.label }}</span>
+          <span class="dropdown-arrow" :class="{ 'open': isDropdownOpen }">▼</span>
+        </button>
+        <v-btn elevation="0" class="refresh-button" @click="updateCategory">
+          <v-icon left>mdi-refresh</v-icon>
+        </v-btn>
+
+        <div v-if="isDropdownOpen" class="dropdown-menu">
+          <button v-for="category in categories" :key="category.id" @click="changeCategory(category)"
+            :class="['dropdown-item', { active: selectedCategory?.id === category.id }]">
+            <span class="category-icon">{{ category.icon }}</span>
+            <span class="category-label">{{ category.label }}</span>
+          </button>
 
             <div v-if="isDropdownOpen" class="dropdown-menu">
                 <button
@@ -43,6 +53,14 @@
             >
           </button>
         </div>
+      </div>
+    </div>
+
+    <div class="questions-container">
+      <div v-for="(question, index) in generatedQuestions" :key="index" class="question-card">
+        <h3>질문 {{ index + 1 }}</h3>
+        <p>{{ question }}</p>
+      </div>
     </div>
 </template>
 
@@ -51,18 +69,21 @@ import { ref, watch } from 'vue';
 
 const props = defineProps(['selectedCategory', 'generatedQuestions', 'categories'])
 
-const emit = defineEmits(['update-category'])
+const emit = defineEmits(['update-category', 'change-category'])
 
 const isDropdownOpen = ref(false);
 const currentIndex = ref(0);
+const newCategory = ref(null);
 
 const toggleDropdown = () => {
-    isDropdownOpen.value = !isDropdownOpen.value;
+  isDropdownOpen.value = !isDropdownOpen.value;
 }
 
 const changeCategory = (category) => {
-    emit('update-category', category);
-    isDropdownOpen.value = false;
+  // emit('update-category', category);
+  emit('change-category', category);
+  newCategory.value = category;
+  isDropdownOpen.value = false;
 }
 
 const nextQuestion = () => {
@@ -77,6 +98,9 @@ const prevQuestion = () => {
   }
 }
 
+const updateCategory = () => {
+  emit('update-category', newCategory.value)
+}
 </script>
 
 <style scoped> 
@@ -210,5 +234,14 @@ const prevQuestion = () => {
     margin-bottom: 20px;
   }
 
- 
+.refresh-button {
+  background-color: #3a3a3a;
+  color: white;
+  align-items: center;
+  margin: 8px;
+}
+
+.refresh-button:hover {
+  background-color: #2563eb;
+}
 </style>

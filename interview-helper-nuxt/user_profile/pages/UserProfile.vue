@@ -81,7 +81,7 @@ onMounted(async () => {
     margin: 0 auto;
     padding: 100px;
     min-height: 100vh;
-    background-color: #1a1a1a;
+    background-color: #121212;
 }
 
 .profile-section {

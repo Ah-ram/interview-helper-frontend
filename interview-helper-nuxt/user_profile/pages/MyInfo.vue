@@ -81,7 +81,7 @@ onMounted(async () => {
   
 <style scoped>
 .page-wrapper {
-  background-color: #1a1a1a;
+  background-color: #121212;
   min-height: 100hv;
   width: 100%;
 }
@@ -91,7 +91,7 @@ onMounted(async () => {
     margin: 0 auto;
     padding: 60px 20px;
     min-height: 100vh;
-    background-color: #1a1a1a;
+    background-color: #121212;
 }
 
 .profile-section {

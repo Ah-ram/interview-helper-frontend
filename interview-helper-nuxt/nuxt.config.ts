@@ -3,11 +3,17 @@ import { defineNuxtConfig } from 'nuxt/config';
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  extends: ['./board/nuxt.config.ts', './authentication/nuxt.config.ts', './interview/nuxt.config.ts', './user_profile/nuxt.config.ts'],
+  extends: ['./board/nuxt.config.ts',
+        './authentication/nuxt.config.ts', 
+        './interview/nuxt.config.ts', 
+        './user_profile/nuxt.config.ts', 
+        './library/nuxt.config.ts'
+    ],
 
   css: [
     'vuetify/styles',
-    '@mdi/font/css/materialdesignicons.min.css'
+    '@mdi/font/css/materialdesignicons.min.css',
+
   ],
 
   build: {
@@ -24,11 +30,19 @@ export default defineNuxtConfig({
   modules: [
       'vuetify-nuxt-module',
       '@pinia/nuxt',
+      '@nuxtjs/google-fonts',
       '~/board/index.ts',
       '~/authentication/index.ts',
       '~/interview/index.ts',
       '~/user_profile/index.ts',
+      '~/library/index.ts'
   ],
+
+  googleFonts: {
+    families: {
+      'Material+Icons': true,
+    }
+  },
 
   imports: {
     dirs: ['./stores']

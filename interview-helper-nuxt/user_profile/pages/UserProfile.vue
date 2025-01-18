@@ -23,9 +23,9 @@
                 </div>
             </NuxtLink>
             
-            <NuxtLink to="/" class="menu-button">
+            <NuxtLink to="/library" class="menu-button">
                 <div class="button-content">
-                    <h3>저장된 질문</h3>
+                    <h3>라이브러리</h3>
                     <span class="arrow">→</span>
                     <p>내가 저장한 질문을 확인하세요</p>
                 </div>

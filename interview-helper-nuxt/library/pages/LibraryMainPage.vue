@@ -2,65 +2,119 @@
     <div class="library-container">
         <div class="directory-grid">
         <Directory
-            v-for="directory in directories"
+            v-for="directory in allDirectories"
             :key="directory.id"
             :id="directory.id"
             :name="directory.name"
             :update-date="directory.updateDate"
+            :is-temp="directory.isTemp"
             @directorySelected="handleDirectorySelect"
             @updateName="updateDirectoryName"
             @deleteDirectory="deleteDirectory"
         />
         <div class="add-directory-container">
-        <button @click="addNewDirectory" class="add-directory-button">
+        <button @click="addTempDirectory" class="add-directory-button">
           <div class="new-directory">
             <div class="directory-front"></div>
             <v-icon class="material-icons">mdi-plus</v-icon>
           </div>
           <span class="button-text">New Directory</span>
         </button>
+        <!-- <div class="new-directory-dialog">
+            <input
+                v-if="isCreating"
+                ref="newDirInput"
+                v-model="directoryName"
+                @keyup.enter="addNewDirectory"
+                @blur="handleBlur"
+                class="directory-name-input"
+                autocomplete="off"
+            />
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLibraryStore } from '../stores/LibraryStore';
 import Directory from '../components/Directory.vue';
 
 const libraryStore = useLibraryStore()
 const router = useRouter()
+const directoryName = ref('')
+// const isCreating = ref(false)
+// const newDirInput = ref<HTMLInputElement | null>(null)
+const tempDirectory = ref<null | {id: string, name: string, updateDate: string, isTemp: boolean}>(null)
 
-const directories = computed(() => {
-    return libraryStore.directories
+let allDirectories = computed(() => {
+    const directories = libraryStore.directories || []
+    return tempDirectory.value ? [...directories, tempDirectory.value] : directories
 })
 
 onMounted(async () => {
     await libraryStore.requestListDirectoryToSpring()
 })
 
-const addNewDirectory = async () => {
-    console.log('addNewDirectory 버튼 눌렀음!')
-    // 폴더 목록 새로고침
-//     await libraryStore.requestListDirectoryToSpring()
-//   } catch (error) {
-//     console.error('새 폴더 생성 실패:', error)
-//   }
+// const handleBlur = () => {
+//     if (!directoryName.value.trim()) {
+//         isCreating.value = false
+//     }
+// }
+
+const addTempDirectory = () => {
+    tempDirectory.value = {
+        id: 'temp-' + Date.now(),
+        name: '',
+        updateDate: new Date().toISOString(),
+        isTemp: true
+    }
 }
+
+// const addNewDirectory = async () => {
+//     console.log('addNewDirectory 버튼 눌렀음!')
+//     isCreating.value = true
+//     await nextTick()
+//     newDirInput.value?.focus()
+
+//     try {
+//         const name = directoryName.value
+//         if (name.trim()) {
+//             await libraryStore.requestCreateDirectoryToSpring(name.trim())
+//         }
+//     } catch (error) {
+//         console.error('폴더 만드는 중 오류 발생:', error)
+//     }
+//     finally {
+//         isCreating.value = false
+//     }
+// }
 
 const handleDirectorySelect = (directoryId: number) => {
 //   router.push(`/folders/${directoryId}`)
 }
 
-const updateDirectoryName = async () => {
-    
-//     // 폴더 목록 새로고침
-//     await libraryStore.requestListDirectoryToSpring()
-//   } catch (error) {
-//     console.error('폴더 이름 업데이트 실패:', error)
-//   }
+const updateDirectoryName = async (directory) => {
+    // if (directory.id.toString().startsWith('temp-')) {
+    //     return
+    // }
+    if (!directory.name || !directory.name.trim()) {
+        tempDirectory.value = null
+        return
+    }
+    try {
+        tempDirectory.value = null
+        await libraryStore.requestCreateDirectoryToSpring(directory.name.trim())
+        await libraryStore.requestListDirectoryToSpring()
+        allDirectories = computed(() => {
+            const directories = libraryStore.directories || []
+        return tempDirectory.value ? [...directories, tempDirectory.value] : directories
+        })
+    } catch (error) {
+        console.error('새 디렉토리 생성 실패:', error)
+    }
 }
 
 const deleteDirectory = async (directoryId: number) => {
@@ -78,6 +132,11 @@ const deleteDirectory = async (directoryId: number) => {
 //   } catch (error) {
 //     console.error('폴더 삭제 실패:', error)
 //   }
+
+    if (directoryId.toString().startsWith('temp-')) {
+        tempDirectory.value = null
+        return
+    }
 }
 
 </script>
@@ -180,5 +239,29 @@ const deleteDirectory = async (directoryId: number) => {
     font-size: 12px;
     color: #333;
     text-align: center;
+}
+
+.new-directory-dialog {
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+}
+
+.directory-name-input {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #3693F4;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.directory-name-input:focus {
+    border-color: #2D7AD4;
+    box-shadow: 0 0 0 2px rgba(54, 147, 244, 0.3);
 }
 </style>

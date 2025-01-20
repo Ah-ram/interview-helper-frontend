@@ -4,19 +4,20 @@
             <div class="directory-content">
                 <div class="edit-overlay">
                 <input
-                v-if="isEditing" 
+                v-if="isEditing || isTemp" 
                 v-model="directoryName"
                 @blur="saveDirectoryName"
-                @keyup.enter="saveDirectoryName"
+                @keyup.enter="handleEnter"
                 ref="nameInput"
                 class="directory-name-input"
+                :placeholder="isTemp ? '새폴더' : ''"
                 />
                 <span v-else class="directory-name">{{ directoryName }}</span>
 
             </div>
         </div>
     </div>                
-    <div class="directory-actions">
+    <div class="directory-actions" v-if="!isTemp">
         <button @click.stop="startEditing" class="action-button">
             <v-icon class="material-icons">mdi-pencil-outline</v-icon>
         </button>
@@ -28,7 +29,7 @@
 </template>
   
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLibraryStore } from '../stores/LibraryStore';
 import { nextTick } from 'process';
@@ -40,6 +41,7 @@ interface DirectoryProps {
     id: number
     name: string
     updateDate: string
+    isTemp?: boolean
 }
 
 const props = defineProps<DirectoryProps>()
@@ -54,8 +56,24 @@ const directoryName = ref(props.name)
 const isEditing = ref(false)
 const nameInput = ref<HTMLInputElement | null>(null)
 
+const isTemp = computed(() => props.isTemp || false)
+
+onMounted(() => {
+    if (props.isTemp) {
+        nextTick(() => {
+            nameInput.value?.focus()
+        })
+    }
+})
+
 const handleDirectoryClick = () => {
-    emit('directorySelected', props.id)
+    if (!isTemp) {
+        emit('directorySelected', props.id)
+    }
+}
+
+const handleEnter = (event: KeyboardEvent) => {
+    event.target?.blur();
 }
 
 const startEditing = () => {
@@ -66,6 +84,11 @@ const startEditing = () => {
 }
 
 const saveDirectoryName = () => {
+    if (isTemp.value && !directoryName.value.trim()) {
+        emit('deleteDirectory', props.id)
+        return
+    }
+
     isEditing.value = false
     emit('updateName', {
         id: props.id,

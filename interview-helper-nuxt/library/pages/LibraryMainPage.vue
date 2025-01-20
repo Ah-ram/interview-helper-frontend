@@ -10,6 +10,7 @@
             :update-date="directory.updateDate"
             :is-temp="directory.isTemp"
             @directorySelected="handleDirectorySelect"
+            @createDirectory="createDirectory"
             @updateName="updateDirectoryName"
             @deleteDirectory="deleteDirectory"
         />
@@ -73,29 +74,40 @@ const handleDirectorySelect = (directory) => {
 //   router.push(`/folders/${directoryId}`)
 }
 
-const updateDirectoryName = async (directory) => {
+const createDirectory = async (directory) => {
     if (directory.id.toString().startsWith('temp-')) {
-        if (!directory.name || !directory.name.trim()) {
+       try {
+            const isDuplicate = await libraryStore.requestCheckDirectoryNameDuplicateToSpring(directory.name.trim())
+            console.log('isDulplicate:', isDuplicate)
             tempDirectory.value = null
-            return
-        }
-        try {
-            tempDirectory.value = null
-            await libraryStore.requestCreateDirectoryToSpring(directory.name.trim())
+            await libraryStore.requestCreateDirectoryToSpring(isDuplicate)
             await libraryStore.requestListDirectoryToSpring()
             allDirectories = computed(() => {
-                const directories = libraryStore.directories || []
-            return tempDirectory.value ? [...directories, tempDirectory.value] : directories
-            })
+                    const directories = libraryStore.directories || []
+                return tempDirectory.value ? [...directories, tempDirectory.value] : directories
+                })
         } catch (error) {
-            console.error('새 디렉토리 생성 실패:', error)
+            console.error('새 디렉토리 생성 중 오류 발생:', error)
+        }   
+    } 
+}
+
+const updateDirectoryName = async (directory) => {
+    try {
+        const isDulplicate = await libraryStore.requestCheckDirectoryNameDuplicateToSpring(directory.name.trim())
+        if (isDulplicate) {
+            alert('이미 존재하는 폴더 이름입니다.')
+
+            // 원래 이름으로 복구
+            const originalDirectory = libraryStore.directories.find(dir => dir.id === directory.id)
+            if (originalDirectory) {
+                directory.name = originalDirectory.name
+            }
+            return 
         }
-    }
-    else {
-        // try {
-        //     await libraryStore.requestUpdate
-        // }
-    }
+    } catch (error) {
+        
+    }      
 }
 
 const deleteDirectory = async (directoryId: number) => {

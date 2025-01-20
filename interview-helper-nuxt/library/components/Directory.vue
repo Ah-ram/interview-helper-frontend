@@ -13,7 +13,6 @@
                 :placeholder="isTemp ? '새폴더' : ''"
                 />
                 <span v-else class="directory-name">{{ directoryName }}</span>
-
             </div>
         </div>
     </div>                
@@ -29,10 +28,9 @@
 </template>
   
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLibraryStore } from '../stores/LibraryStore';
-import { nextTick } from 'process';
 
 const libraryStore = useLibraryStore()
 const router = useRouter()
@@ -49,6 +47,7 @@ const props = defineProps<DirectoryProps>()
 
 const emit = defineEmits<{
     directorySelected: [DirectoryProps]
+    createDirectory: [{ id: number | string, name: string }]
     updateName: [{ id: number, name: string }]
     deleteDirectory: [id: number]
 }>()
@@ -74,17 +73,35 @@ const handleDirectoryClick = () => {
 }
 
 const handleEnter = (event: KeyboardEvent) => {
-    event.target?.blur();
+    if (isTemp.value) {
+        if (!directoryName.value.trim()) {
+            directoryName.value = '새폴더'
+        }
+        emit('createDirectory', {
+            id: props.id,
+            name: directoryName.value.trim(),
+            isEnterPressed: true
+        })
+    } else {
+        event.target?.blur();
+    }
 }
 
 const handleBlur = () => {
     if (isTemp.value) {
-        saveDirectoryName()
+        emit('deleteDirectory', props.id)
     } else if (isEditing.value) {
+        if (!directoryName.value.trim()) {
+            // 이름 입력 안하면 원래 이름으로 복구
+            directoryName.value = props.name
+            isEditing.value = false
+            return
+        }
         isEditing.value = false
         emit('updateName', {
             id: props.id,
-            name: directoryName.value
+            name: directoryName.value,
+            isEnterPressed: false
         })
     }
 }
@@ -113,7 +130,6 @@ const handleDelete = () => {
         emit('deleteDirectory', props.id)
     }
 }
-
 
 </script>
   

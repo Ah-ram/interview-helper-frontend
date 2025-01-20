@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import { createAxiosInstances } from "../../utility/axiosInstance";
 
+
 export const useLibraryStore = defineStore('libraryStore', {
     state: () => ({
-        directories: [] as Array<{ id: number; name: string; updateDate: string }>,
+        directories: [] as Array<{ id: number; name: string; createDate: string; updateDate: string }>,
     }),
 
     actions: {

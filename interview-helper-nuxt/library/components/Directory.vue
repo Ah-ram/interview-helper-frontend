@@ -39,13 +39,14 @@ const router = useRouter()
 interface DirectoryProps {
     id: number
     name: string
+    createDate: string
     updateDate: string
 }
 
 const props = defineProps<DirectoryProps>()
 
 const emit = defineEmits<{
-    directorySelected: [id: number]
+    directorySelected: [DirectoryProps]
     updateName: [{ id: number, name: string }]
     deleteDirectory: [id: number]
 }>()
@@ -55,7 +56,7 @@ const isEditing = ref(false)
 const nameInput = ref<HTMLInputElement | null>(null)
 
 const handleDirectoryClick = () => {
-    emit('directorySelected', props.id)
+    emit('directorySelected', props)
 }
 
 const startEditing = () => {

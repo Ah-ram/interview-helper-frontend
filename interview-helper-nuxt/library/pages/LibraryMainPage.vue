@@ -6,29 +6,38 @@
             :key="directory.id"
             :id="directory.id"
             :name="directory.name"
+            :create-date="directory.createDate"
             :update-date="directory.updateDate"
             @directorySelected="handleDirectorySelect"
             @updateName="updateDirectoryName"
             @deleteDirectory="deleteDirectory"
         />
         <div class="add-directory-container">
-        <button @click="addNewDirectory" class="add-directory-button">
-          <div class="new-directory">
-            <div class="directory-front"></div>
-            <v-icon class="material-icons">mdi-plus</v-icon>
-          </div>
-          <span class="button-text">New Directory</span>
-        </button>
-      </div>
+            <button @click="addNewDirectory" class="add-directory-button">
+                <div class="new-directory">
+                    <div class="directory-front"></div>
+                    <v-icon class="material-icons">mdi-plus</v-icon>
+                </div>
+                <span class="button-text">New Directory</span>
+            </button>
+        </div>
+        <div v-if="isSidebarVisible">
+            <LibraryDirectorySidebar 
+            :selected-directory="selectedDirectory"
+            @closeSidebar="closeSidebar"
+            @selectCategory="selectCategory"
+            />
+        </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLibraryStore } from '../stores/LibraryStore';
 import Directory from '../components/Directory.vue';
+import LibraryDirectorySidebar from '../components/DirectorySidebar.vue';
 
 const libraryStore = useLibraryStore()
 const router = useRouter()
@@ -36,6 +45,10 @@ const router = useRouter()
 const directories = computed(() => {
     return libraryStore.directories
 })
+
+const selectedDirectory = ref<null | {id: number, name: string, createDate: string, updateDate: string}>(null)
+const isSidebarVisible = ref(false)
+const selectedCategory = ref<null | number>(null)
 
 onMounted(async () => {
     await libraryStore.requestListDirectoryToSpring()
@@ -50,7 +63,9 @@ const addNewDirectory = async () => {
 //   }
 }
 
-const handleDirectorySelect = (directoryId: number) => {
+const handleDirectorySelect = (directory) => {
+    selectedDirectory.value = directory
+    isSidebarVisible.value = true
 //   router.push(`/folders/${directoryId}`)
 }
 
@@ -78,6 +93,14 @@ const deleteDirectory = async (directoryId: number) => {
 //   } catch (error) {
 //     console.error('폴더 삭제 실패:', error)
 //   }
+}
+
+const closeSidebar = () => {
+    isSidebarVisible.value = false;
+}
+
+const selectCategory = (value) => {
+    selectedCategory.value = value
 }
 
 </script>

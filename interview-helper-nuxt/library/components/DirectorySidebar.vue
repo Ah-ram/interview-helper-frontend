@@ -11,9 +11,9 @@
         <div class="directory-information">
             <h2>Information</h2>
             <div class="directory-information-content">
-                <p>폴더명: {{ selectedFolder.name }}</p>
-                <p>생성일: {{ selectedFolder.createDate }}</p>
-                <p>수정일: {{ selectedFolder.updateDate }}</p>
+                <p>폴더명: {{ selectedDirectory.name }}</p>
+                <p>생성일: {{ selectedDirectory.createDate }}</p>
+                <p>수정일: {{ selectedDirectory.updateDate }}</p>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const props = defineProps(["selectedFolder"])
+const props = defineProps(["selectedDirectory"])
 const emit = defineEmits(["close-sidebar", "select-category"])
 
 const categories = ref(["기술 역량", "프로젝트 경험", "문제 해결", "커뮤니케이션", "자기 소개 및 동기"])

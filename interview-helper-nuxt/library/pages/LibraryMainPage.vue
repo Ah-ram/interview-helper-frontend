@@ -20,17 +20,6 @@
           </div>
           <span class="button-text">New Directory</span>
         </button>
-        <!-- <div class="new-directory-dialog">
-            <input
-                v-if="isCreating"
-                ref="newDirInput"
-                v-model="directoryName"
-                @keyup.enter="addNewDirectory"
-                @blur="handleBlur"
-                class="directory-name-input"
-                autocomplete="off"
-            />
-        </div> -->
       </div>
     </div>
   </div>
@@ -45,8 +34,6 @@ import Directory from '../components/Directory.vue';
 const libraryStore = useLibraryStore()
 const router = useRouter()
 const directoryName = ref('')
-// const isCreating = ref(false)
-// const newDirInput = ref<HTMLInputElement | null>(null)
 const tempDirectory = ref<null | {id: string, name: string, updateDate: string, isTemp: boolean}>(null)
 
 let allDirectories = computed(() => {
@@ -58,12 +45,6 @@ onMounted(async () => {
     await libraryStore.requestListDirectoryToSpring()
 })
 
-// const handleBlur = () => {
-//     if (!directoryName.value.trim()) {
-//         isCreating.value = false
-//     }
-// }
-
 const addTempDirectory = () => {
     tempDirectory.value = {
         id: 'temp-' + Date.now(),
@@ -73,24 +54,6 @@ const addTempDirectory = () => {
     }
 }
 
-// const addNewDirectory = async () => {
-//     console.log('addNewDirectory 버튼 눌렀음!')
-//     isCreating.value = true
-//     await nextTick()
-//     newDirInput.value?.focus()
-
-//     try {
-//         const name = directoryName.value
-//         if (name.trim()) {
-//             await libraryStore.requestCreateDirectoryToSpring(name.trim())
-//         }
-//     } catch (error) {
-//         console.error('폴더 만드는 중 오류 발생:', error)
-//     }
-//     finally {
-//         isCreating.value = false
-//     }
-// }
 
 const handleDirectorySelect = (directoryId: number) => {
 //   router.push(`/folders/${directoryId}`)

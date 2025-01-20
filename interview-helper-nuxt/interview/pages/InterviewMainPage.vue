@@ -34,11 +34,11 @@
   const interviewStore = useInterviewStore()
   
   const categories = [
-    { id: 'technical', label: '기술 역량', icon: '🎨' },
-    { id: 'project', label: '프로젝트 경험', icon: '👁️' },
-    { id: 'problem-solving', label: '문제 해결', icon: '📝' },
-    { id: 'communication', label: '커뮤니케이션', icon: '💡' },
-    { id: 'introduction', label: '자기 소개 및 동기', icon: '💭' },
+    { id: 0, label: '기술 역량', icon: '🎨' },
+    { id: 1, label: '프로젝트 경험', icon: '👁️' },
+    { id: 2, label: '문제 해결', icon: '📝' },
+    { id: 3, label: '커뮤니케이션', icon: '💡' },
+    { id: 4, label: '자기 소개 및 동기', icon: '💭' },
   ];
 
   

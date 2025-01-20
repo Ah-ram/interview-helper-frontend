@@ -40,15 +40,28 @@
             <
           </button>
           <div class="questions-container">
-              <div v-if="generatedQuestions.length > 0" class="question-card">
+              <div v-if="generatedQuestions.length > 0 && currentIndex != generatedQuestions.length" class="question-card">
                   <h3>질문 {{ currentIndex + 1 }}</h3>
                   <h1>{{ generatedQuestions[currentIndex] }}</h1>
+              </div>
+              <div v-else class="question-card">
+                  <div v-for="(question, index) in generatedQuestions">
+                      <h3>질문 {{ index + 1 }}</h3>
+                      <h1>{{ question }}</h1>
+                      <button v-if="isSelectedQuestion[index]" @click="checkQuestion(index)">
+                        <v-icon>mdi-star</v-icon>
+                      </button>
+                      <button v-else @click="checkQuestion(index)">
+                        <v-icon>mdi-star-outline</v-icon>
+                      </button>
+                  </div>
+                  <button @click="saveQuestion">질문 저장 요청</button>
               </div>
           </div>
           <button
             class="nav-button next"
             @click="nextQuestion"
-            :disabled="currentIndex === generatedQuestions.length - 1"
+            :disabled="currentIndex === generatedQuestions.length"
           >
             >
           </button>
@@ -56,16 +69,19 @@
       </div>
     </div>
 
-    <div class="questions-container">
+    <!-- <div class="questions-container">
       <div v-for="(question, index) in generatedQuestions" :key="index" class="question-card">
         <h3>질문 {{ index + 1 }}</h3>
         <p>{{ question }}</p>
       </div>
-    </div>
+    </div> -->
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useInterviewStore } from '../stores/interviewStore';
+
+const interviewStore = useInterviewStore()
 
 const props = defineProps(['selectedCategory', 'generatedQuestions', 'categories'])
 
@@ -73,7 +89,9 @@ const emit = defineEmits(['update-category', 'change-category'])
 
 const isDropdownOpen = ref(false);
 const currentIndex = ref(0);
-const newCategory = ref(null);
+const newCategory = ref(props.selectedCategory);
+
+let isSelectedQuestion = ref([false, false, false, false, false])
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
@@ -87,7 +105,7 @@ const changeCategory = (category) => {
 }
 
 const nextQuestion = () => {
-  if (currentIndex.value < props.generatedQuestions.length - 1) {
+  if (currentIndex.value < props.generatedQuestions.length) {
     currentIndex.value++
   }
 }
@@ -100,6 +118,21 @@ const prevQuestion = () => {
 
 const updateCategory = () => {
   emit('update-category', newCategory.value)
+}
+
+const checkQuestion = (index) => {
+  isSelectedQuestion.value[index] = !isSelectedQuestion.value[index]
+}
+
+const saveQuestion = async () => {
+  const titleList: string[] = []
+  for (let i = 0; i < 5; i++) {
+    if (isSelectedQuestion.value[i]) {
+      titleList.push(props.generatedQuestions[i])
+    }
+  }
+  const categoryIndex: number = props.selectedCategory.id
+  const res = await interviewStore.requestSaveQuestionListToSpring(titleList, categoryIndex)
 }
 </script>
 

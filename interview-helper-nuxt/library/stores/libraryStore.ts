@@ -33,6 +33,20 @@ export const useLibraryStore = defineStore('libraryStore', {
             } catch (error) {
                 console.error('requestCreateDirectoryToSpring() 중 오류 발생:', error);
             }
+        },
+        async requestCheckDirectoryNameDuplicateToSpring(name: string) {
+            const { springAxiosInst } = createAxiosInstances();
+
+            try {
+                const userToken = localStorage.getItem('userToken');
+                const response = await springAxiosInst.post('/library/check-directory-name-duplicate', {
+                    userToken: userToken,
+                    name: name
+                })
+                return response.data;
+            } catch (error) {
+                console.error('requestCheckDirectoryNameDuplicateToSpring() 중 오류 발생:', error);
+            }
         }
     }
 });

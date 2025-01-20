@@ -40,5 +40,18 @@ export const useInterviewStore = defineStore('interviewStore', {
                 console.error("requestGeneratedQuestionsResultToFastAPI() 중 에러 발생: ", error)
             }
         },
+        async requestSaveQuestionListToSpring(titleList: string[], categoryIndex: number) {
+            const { springAxiosInst } = createAxiosInstances()
+
+            try {
+                const userToken = localStorage.getItem("userToken")
+                const response = await springAxiosInst.post("/question/create", { userToken: userToken, titleList: titleList, categoryIndex: categoryIndex })
+                console.log("requestSaveQuestionListToSpring() response:", response)
+
+                return response.data
+            } catch (error) {
+                console.error("requestSaveQuestionListToSpring() 중 에러 발생:", error)
+            }
+        }
     }
 });

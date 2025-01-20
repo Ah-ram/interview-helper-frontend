@@ -6,6 +6,7 @@
             :key="directory.id"
             :id="directory.id"
             :name="directory.name"
+            :create-date="directory.createDate"
             :update-date="directory.updateDate"
             :is-temp="directory.isTemp"
             @directorySelected="handleDirectorySelect"
@@ -21,15 +22,23 @@
           <span class="button-text">New Directory</span>
         </button>
       </div>
+        <div v-if="isSidebarVisible">
+            <LibraryDirectorySidebar 
+            :selected-directory="selectedDirectory"
+            @closeSidebar="closeSidebar"
+            @selectCategory="selectCategory"
+            />
+        </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref, nextTick } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLibraryStore } from '../stores/LibraryStore';
 import Directory from '../components/Directory.vue';
+import LibraryDirectorySidebar from '../components/DirectorySidebar.vue';
 
 const libraryStore = useLibraryStore()
 const router = useRouter()
@@ -40,6 +49,10 @@ let allDirectories = computed(() => {
     const directories = libraryStore.directories || []
     return tempDirectory.value ? [...directories, tempDirectory.value] : directories
 })
+
+const selectedDirectory = ref<null | {id: number, name: string, createDate: string, updateDate: string}>(null)
+const isSidebarVisible = ref(false)
+const selectedCategory = ref<null | number>(null)
 
 onMounted(async () => {
     await libraryStore.requestListDirectoryToSpring()
@@ -54,8 +67,9 @@ const addTempDirectory = () => {
     }
 }
 
-
-const handleDirectorySelect = (directoryId: number) => {
+const handleDirectorySelect = (directory) => {
+    selectedDirectory.value = directory
+    isSidebarVisible.value = true
 //   router.push(`/folders/${directoryId}`)
 }
 
@@ -100,6 +114,15 @@ const deleteDirectory = async (directoryId: number) => {
         tempDirectory.value = null
         return
     }
+}
+
+const closeSidebar = () => {
+    isSidebarVisible.value = false;
+}
+
+const selectCategory = (value) => {
+    selectedCategory.value = value
+    console.log("selectedCategory:", value)
 }
 
 </script>

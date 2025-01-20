@@ -40,6 +40,7 @@ const router = useRouter()
 interface DirectoryProps {
     id: number
     name: string
+    createDate: string
     updateDate: string
     isTemp?: boolean
 }
@@ -47,7 +48,7 @@ interface DirectoryProps {
 const props = defineProps<DirectoryProps>()
 
 const emit = defineEmits<{
-    directorySelected: [id: number]
+    directorySelected: [DirectoryProps]
     updateName: [{ id: number, name: string }]
     deleteDirectory: [id: number]
 }>()
@@ -68,7 +69,7 @@ onMounted(() => {
 
 const handleDirectoryClick = () => {
     if (!isTemp) {
-        emit('directorySelected', props.id)
+        emit('directorySelected', props)
     }
 }
 

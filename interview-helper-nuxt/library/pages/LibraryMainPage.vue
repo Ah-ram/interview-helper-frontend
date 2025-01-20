@@ -74,23 +74,27 @@ const handleDirectorySelect = (directory) => {
 }
 
 const updateDirectoryName = async (directory) => {
-    // if (directory.id.toString().startsWith('temp-')) {
-    //     return
-    // }
-    if (!directory.name || !directory.name.trim()) {
-        tempDirectory.value = null
-        return
+    if (directory.id.toString().startsWith('temp-')) {
+        if (!directory.name || !directory.name.trim()) {
+            tempDirectory.value = null
+            return
+        }
+        try {
+            tempDirectory.value = null
+            await libraryStore.requestCreateDirectoryToSpring(directory.name.trim())
+            await libraryStore.requestListDirectoryToSpring()
+            allDirectories = computed(() => {
+                const directories = libraryStore.directories || []
+            return tempDirectory.value ? [...directories, tempDirectory.value] : directories
+            })
+        } catch (error) {
+            console.error('새 디렉토리 생성 실패:', error)
+        }
     }
-    try {
-        tempDirectory.value = null
-        await libraryStore.requestCreateDirectoryToSpring(directory.name.trim())
-        await libraryStore.requestListDirectoryToSpring()
-        allDirectories = computed(() => {
-            const directories = libraryStore.directories || []
-        return tempDirectory.value ? [...directories, tempDirectory.value] : directories
-        })
-    } catch (error) {
-        console.error('새 디렉토리 생성 실패:', error)
+    else {
+        // try {
+        //     await libraryStore.requestUpdate
+        // }
     }
 }
 

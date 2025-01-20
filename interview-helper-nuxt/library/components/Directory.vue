@@ -6,7 +6,7 @@
                 <input
                 v-if="isEditing || isTemp" 
                 v-model="directoryName"
-                @blur="saveDirectoryName"
+                @blur="handleBlur"
                 @keyup.enter="handleEnter"
                 ref="nameInput"
                 class="directory-name-input"
@@ -68,13 +68,25 @@ onMounted(() => {
 })
 
 const handleDirectoryClick = () => {
-    if (!isTemp) {
+    if (!isTemp.value) {
         emit('directorySelected', props)
     }
 }
 
 const handleEnter = (event: KeyboardEvent) => {
     event.target?.blur();
+}
+
+const handleBlur = () => {
+    if (isTemp.value) {
+        saveDirectoryName()
+    } else if (isEditing.value) {
+        isEditing.value = false
+        emit('updateName', {
+            id: props.id,
+            name: directoryName.value
+        })
+    }
 }
 
 const startEditing = () => {
@@ -85,12 +97,11 @@ const startEditing = () => {
 }
 
 const saveDirectoryName = () => {
-    if (isTemp.value && !directoryName.value.trim()) {
+    if (!directoryName.value.trim()) {
         emit('deleteDirectory', props.id)
         return
     }
 
-    isEditing.value = false
     emit('updateName', {
         id: props.id,
         name: directoryName.value

@@ -1,6 +1,6 @@
 <template>
     <div class="sidebar">
-        <button class="close-button" @click="closeSidebar"></button>
+        <button class="close-button" @click="closeSidebar">X</button>
         <div class="categories">
             <h2>Categories</h2>
             <ul>
@@ -38,10 +38,16 @@ const selectCategory = (value) => {
 
 <style scoped>
 .sidebar {
+    position: fixed;
     width: 300px;
-    border-left: 1px soild #ddd;
+    border-left: 1px solid #eee;
     padding-left: 20px;
     flex-shrink: 0;
+    right: 0;
+    top: 10;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .close-button {
@@ -74,6 +80,12 @@ const selectCategory = (value) => {
 .categories li {
     margin: 10px 0;
     font-size: 16px;
+}
+
+.directory-information {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    margin-top: auto;
 }
 
 .directory-information h2{

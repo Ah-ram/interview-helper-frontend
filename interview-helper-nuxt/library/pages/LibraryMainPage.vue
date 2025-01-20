@@ -101,6 +101,7 @@ const closeSidebar = () => {
 
 const selectCategory = (value) => {
     selectedCategory.value = value
+    console.log("selectedCategory:", value)
 }
 
 </script>

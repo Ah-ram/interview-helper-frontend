@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed, ref, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLibraryStore } from '../stores/LibraryStore';
 import Directory from '../components/Directory.vue';
@@ -59,7 +59,7 @@ const router = useRouter()
 const directoryName = ref('')
 const tempDirectory = ref<null | {id: string, name: string, updateDate: string, isTemp: boolean}>(null)
 
-let allDirectories = computed(() => {
+const allDirectories = computed(() => {
     const directories = libraryStore.directories || []
     return tempDirectory.value ? [...directories, tempDirectory.value] : directories
 })
@@ -96,10 +96,6 @@ const createDirectory = async (directory) => {
             tempDirectory.value = null
             await libraryStore.requestCreateDirectoryToSpring(isDuplicate)
             await libraryStore.requestListDirectoryToSpring()
-            allDirectories = computed(() => {
-                    const directories = libraryStore.directories || []
-                return tempDirectory.value ? [...directories, tempDirectory.value] : directories
-                })
         } catch (error) {
             console.error('새 디렉토리 생성 중 오류 발생:', error)
         }   
@@ -108,19 +104,31 @@ const createDirectory = async (directory) => {
 
 const updateDirectoryName = async (directory) => {
     try {
-        const isDulplicate = await libraryStore.requestCheckDirectoryNameDuplicateToSpring(directory.name.trim())
-        if (isDulplicate) {
-            alert('이미 존재하는 폴더 이름입니다.')
+        // 현재 이름과 동일한 경우 무시
+        const originalDirectory = libraryStore.directories.find(dir => dir.id === directory.id)
+        if (originalDirectory && originalDirectory.name === directory.name.trim()) {
+            return
+        }
 
+        // 다른 디렉토리와 이름 중복체크
+        const existingDirectory = libraryStore.directories.find(dir => dir.id !== directory.id && dir.name === directory.name.trim())
+        if (existingDirectory) {
+            alert('이미 존재하는 폴더 이름입니다.')
             // 원래 이름으로 복구
-            const originalDirectory = libraryStore.directories.find(dir => dir.id === directory.id)
             if (originalDirectory) {
                 directory.name = originalDirectory.name
             }
-            return 
+            return
+        }
+        await libraryStore.requestChangeDirectoryNameToSpring(directory.id, directory.name.trim())    
+        await libraryStore.requestListDirectoryToSpring()
+
+        const updatedDirectory = libraryStore.directories.find(dir => dir.id === directory.id)
+        if (updatedDirectory) {
+            directory.name = updatedDirectory.name
         }
     } catch (error) {
-        
+        console.error('디렉토리 이름 변경 중 오류 발생:', error)
     }      
 }
 

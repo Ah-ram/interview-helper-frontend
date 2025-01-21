@@ -14,7 +14,6 @@ export const useLibraryStore = defineStore('libraryStore', {
             try {
                 const userToken = localStorage.getItem('userToken');
                 const response = await springAxiosInst.post('/library/list-directory', { userToken: userToken });
-                console.log('response:', response)
                 this.directories = response.data;
             } catch (error) {
                 console.error('requestListDirectoryToSpring() 중 오류 발생:', error);
@@ -46,6 +45,21 @@ export const useLibraryStore = defineStore('libraryStore', {
                 return response.data;
             } catch (error) {
                 console.error('requestCheckDirectoryNameDuplicateToSpring() 중 오류 발생:', error);
+            }
+        },
+        async requestChangeDirectoryNameToSpring(directoryId: number, name: string) {
+            const { springAxiosInst } = createAxiosInstances();
+
+            try {
+                const userToken = localStorage.getItem('userToken');
+                const response = await springAxiosInst.put(`/library/change-directory-name/${directoryId}`, {
+                    userToken: userToken,
+                    name: name
+                })
+                console.log('change name response:', response.data)
+                return response.data;
+            } catch (error) {
+                console.error('requestChangeDirectoryNameToSpring() 중 오류 발생:', error);
             }
         }
     }

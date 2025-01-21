@@ -54,14 +54,15 @@ const emit = defineEmits<{
 
 const directoryName = ref(props.name)
 const isEditing = ref(false)
-const nameInput = ref<HTMLInputElement | null>(null)
+// const nameInput = ref<HTMLInputElement | null>(null)
+const nameInput = ref(null as unknown as HTMLInputElement)
 
 const isTemp = computed(() => props.isTemp || false)
 
 onMounted(() => {
     if (props.isTemp) {
         nextTick(() => {
-            nameInput.value?.focus()
+            nameInput.value.focus()
         })
     }
 })
@@ -83,6 +84,13 @@ const handleEnter = (event: KeyboardEvent) => {
             isEnterPressed: true
         })
     } else {
+        emit('updateName', {
+            id: props.id,
+            name: directoryName.value.trim(),
+            isEnterPressed: false
+        })
+        isEditing.value = false
+        // directoryName.value = nameInput.value.value
         event.target?.blur();
     }
 }
@@ -98,30 +106,14 @@ const handleBlur = () => {
             return
         }
         isEditing.value = false
-        emit('updateName', {
-            id: props.id,
-            name: directoryName.value,
-            isEnterPressed: false
-        })
+        directoryName.value = props.name
     }
 }
 
 const startEditing = () => {
     isEditing.value = true
     nextTick(() => {
-        nameInput.value?.focus()
-    })
-}
-
-const saveDirectoryName = () => {
-    if (!directoryName.value.trim()) {
-        emit('deleteDirectory', props.id)
-        return
-    }
-
-    emit('updateName', {
-        id: props.id,
-        name: directoryName.value
+        nameInput.value.focus()
     })
 }
 

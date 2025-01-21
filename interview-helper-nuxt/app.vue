@@ -20,3 +20,8 @@ export default {
 </script>
 
 
+<style>
+.v-main {
+    background-color: #121212;
+}
+</style>

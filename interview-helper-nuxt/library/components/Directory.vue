@@ -196,7 +196,7 @@ const handleDelete = () => {
 }
 
 .directory-name {
-    color: #333;
+    color: #fff;
     font-size: 12px;
     text-align: center;
     margin-top: 70px;

@@ -1,10 +1,13 @@
 <template>
     <div class="sidebar">
-        <button class="close-button" @click="closeSidebar">X</button>
+        <v-icon class="close-button" @click="closeSidebar">mdi-close</v-icon>
         <div class="categories">
             <h2>Categories</h2>
             <ul>
-                <li v-for="(category, index) in categories" :key="index" @click="selectCategory(index)">{{ category }}</li>
+                <div v-for="(category, index) in categories" :key="index" @click="selectCategory(index)" class="category">
+                    <v-btn elevation="0" :class="['category-button', { active: selectedCategory === index }]">{{ category }}   
+                    </v-btn>
+                </div>
             </ul>
         </div>
 
@@ -22,10 +25,10 @@
 <script setup>
 import { ref } from 'vue'
 
-const props = defineProps(["selectedDirectory"])
+const props = defineProps(["selectedDirectory", "selectedCategory"])
 const emit = defineEmits(["close-sidebar", "select-category"])
 
-const categories = ref(["기술 역량", "프로젝트 경험", "문제 해결", "커뮤니케이션", "자기 소개 및 동기"])
+const categories = ref(["🎨 기술 역량", "👁️ 프로젝트 경험", "📝 문제 해결", "💡 커뮤니케이션", "💭 자기 소개 및 동기"])
 
 const closeSidebar = () => {
     emit("close-sidebar", false)
@@ -40,21 +43,20 @@ const selectCategory = (value) => {
 .sidebar {
     position: fixed;
     width: 300px;
-    border-left: 1px solid #eee;
+    border-left: 1px solid #666;
     padding-left: 20px;
     flex-shrink: 0;
     right: 0;
-    top: 10;
-    height: 85vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .close-button {
     position: absolute;
-    top: 10px;
-    right: 40px;
-    background: red;
+    margin-top: 30px;
+    right: 20px;
+    /* background: red; */
     color: white;
     border: none;
     border-radius: 50%;
@@ -68,13 +70,24 @@ const selectCategory = (value) => {
     z-index: 1;
 }
 
+.close-button:hover {
+    scale: 1.1;
+    background: #666;
+    opacity: 0.8;
+}
+
 .categories {
-    margin-bottom: 40px;
+    margin-top: 80px;
+}
+
+.categories h2 {
+    color: #fff;
+    margin-bottom: 20px;
 }
 
 .categories ul {
     list-style: none;
-    padding: 0;
+    padding: 0;    
 }
 
 .categories li {
@@ -82,17 +95,46 @@ const selectCategory = (value) => {
     font-size: 16px;
 }
 
+.category {
+    width: 300px;
+    /* padding-left: -10px; */
+    /* margin-bottom: 17px; */
+}
+
+.category-button {
+    border: none;
+    border-radius: 8px;
+    background-color: #121212;
+    color: #fff;
+    width: 282px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 16px;
+    height: 60px;
+    margin-left: -12px;
+    padding-left: 30px;
+}
+
+.category-button.active {
+    background-color: #2563eb;
+}
+
 .directory-information {
-    padding: 20px;
-    border-top: 1px solid #eee;
-    margin-top: auto;
+    color: #fff;
+    padding-top: 30px;
+    border-top: 1px solid #666;
+    margin-top: 15vh;
+    width: 282px;
+    margin-left: -12px;
 }
 
 .directory-information h2{
-    margin-bottom: 20px;
+    margin: 0 0 30px 12px;
 }
 
 .directory-information-content p {
-    margin: 10px 0;
+    padding-left: 20px;
+    margin: 15px 0;
 }
 </style>

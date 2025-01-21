@@ -1,4 +1,5 @@
 <template>
+    <div v-if="!isQuestionListVisible" class="wrapper">
     <div class="library-container">
         <div class="directory-grid">
         <Directory
@@ -23,15 +24,26 @@
           <span class="button-text">New Directory</span>
         </button>
       </div>
-        <div v-if="isSidebarVisible">
+        
+    </div>
+  </div>
+  <div v-if="isSidebarVisible">
             <LibraryDirectorySidebar 
             :selected-directory="selectedDirectory"
+            :selected-category="selectedCategory"
             @closeSidebar="closeSidebar"
             @selectCategory="selectCategory"
             />
-        </div>
     </div>
-  </div>
+    </div>
+    <div v-else>
+        <QuestionList 
+            :selected-directory="selectedDirectory"
+            :selected-category="selectedCategory"
+            @goToDirectory="goToDirectory"
+            @updateCategory="updateCategoryFromQuestionList"
+        />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -40,6 +52,7 @@ import { useRouter } from 'vue-router';
 import { useLibraryStore } from '../stores/LibraryStore';
 import Directory from '../components/Directory.vue';
 import LibraryDirectorySidebar from '../components/DirectorySidebar.vue';
+import QuestionList from '../components/QuestionList.vue';
 
 const libraryStore = useLibraryStore()
 const router = useRouter()
@@ -54,6 +67,8 @@ const allDirectories = computed(() => {
 const selectedDirectory = ref<null | {id: number, name: string, createDate: string, updateDate: string}>(null)
 const isSidebarVisible = ref(false)
 const selectedCategory = ref<null | number>(null)
+
+const isQuestionListVisible = ref(false)
 
 onMounted(async () => {
     await libraryStore.requestListDirectoryToSpring()
@@ -71,7 +86,6 @@ const addTempDirectory = () => {
 const handleDirectorySelect = (directory) => {
     selectedDirectory.value = directory
     isSidebarVisible.value = true
-//   router.push(`/folders/${directoryId}`)
 }
 
 const createDirectory = async (directory) => {
@@ -144,17 +158,34 @@ const closeSidebar = () => {
     isSidebarVisible.value = false;
 }
 
-const selectCategory = (value) => {
+const selectCategory = async (value) => {
     selectedCategory.value = value
-    console.log("selectedCategory:", value)
+    isSidebarVisible.value = false
+    isQuestionListVisible.value = true
+}
+
+const goToDirectory = (value) => {
+    isQuestionListVisible.value = value
+    isSidebarVisible.value = true
+}
+
+const updateCategoryFromQuestionList = (value) => {
+    selectedCategory.value = value
 }
 
 </script>
   
 <style scoped>
+.wrapper {
+    width: 100%;
+    display: flex;
+    
+}
+
 .library-container {
     padding: 50px;
-    background-color: #fff;
+    background-color: #121212;
+    width: calc(100% - 300px);
 }
 
 .directory-grid {
@@ -247,7 +278,7 @@ const selectCategory = (value) => {
 }
 .button-text {
     font-size: 12px;
-    color: #333;
+    color: #fff;
     text-align: center;
 }
 

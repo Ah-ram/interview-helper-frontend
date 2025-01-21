@@ -61,6 +61,18 @@ export const useLibraryStore = defineStore('libraryStore', {
             } catch (error) {
                 console.error('requestChangeDirectoryNameToSpring() 중 오류 발생:', error);
             }
+        },
+        async requestListQuestionToSpring(directoryName: string, categoryIndex: number) {
+            const { springAxiosInst } = createAxiosInstances()
+
+            try {
+                const userToken = localStorage.getItem("userToken")
+                const response = await springAxiosInst.post('/library/list-question', { userToken: userToken, directoryName: directoryName, categoryIndex: categoryIndex })
+                console.log("requestListQuestionToSpring() response:", response)
+                return response.data
+            } catch (error) {
+                console.error("requestListQuestionToSpring() 중 에러 발생:", error)
+            }
         }
     }
 });

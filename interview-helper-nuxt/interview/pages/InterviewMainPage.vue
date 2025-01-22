@@ -64,7 +64,7 @@
   
   <style scoped>
   .container {
-    min-height: 100vh;
+    min-height: 100%;
     background-color: #121212;
     padding: 2rem;
     display: flex;

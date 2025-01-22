@@ -73,6 +73,18 @@ export const useLibraryStore = defineStore('libraryStore', {
             } catch (error) {
                 console.error("requestListQuestionToSpring() 중 에러 발생:", error)
             }
+        },
+        async requestDeleteDirectoryToSpring(directoryId: number) {
+            const { springAxiosInst } = createAxiosInstances()
+
+            try {
+                const userToken = localStorage.getItem('userToken')
+                const response = await springAxiosInst.delete(`/library/delete-directory/${directoryId}`, {data:{ userToken: userToken }})
+                console.log("deleteDirectory response:", response)
+                return response.data
+            } catch (error) {
+                console.error('requestDeleteDirectoryToSpring() 중 에러 발생:', error)
+            }
         }
     }
 });

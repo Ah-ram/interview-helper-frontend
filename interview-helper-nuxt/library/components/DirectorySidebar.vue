@@ -14,9 +14,9 @@
         <div class="directory-information">
             <h2>Information</h2>
             <div class="directory-information-content">
-                <p>폴더명: {{ selectedDirectory.name }}</p>
-                <p>생성일: {{ selectedDirectory.createDate }}</p>
-                <p>수정일: {{ selectedDirectory.updateDate }}</p>
+                <p><span>폴더명: </span>{{ selectedDirectory.name }}</p>
+                <p><span>생성일: </span>{{ selectedDirectory.createDate }}</p>
+                <p><span>수정일: </span>{{ selectedDirectory.updateDate }}</p>
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@ const selectCategory = (value) => {
     padding-left: 30px;
 }
 
-.category-button.active {
+.category-button:hover {
     background-color: #2563eb;
 }
 
@@ -134,7 +134,13 @@ const selectCategory = (value) => {
 }
 
 .directory-information-content p {
-    padding-left: 20px;
+    padding-left: 30px;
     margin: 15px 0;
+    font-weight: bold;
 }
+
+.directory-information-content p span {
+    color: #3693f4;
+}
+
 </style>

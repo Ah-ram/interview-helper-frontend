@@ -120,6 +120,7 @@ const updateDirectoryName = async (directory) => {
             }
             return
         }
+
         await libraryStore.requestChangeDirectoryNameToSpring(directory.id, directory.name.trim())    
         await libraryStore.requestListDirectoryToSpring()
 
@@ -132,25 +133,16 @@ const updateDirectoryName = async (directory) => {
     }      
 }
 
-const deleteDirectory = async (directoryId: number) => {
-//   try {
-//     const { springAxiosInst } = createAxiosInstances()
-//     const userToken = localStorage.getItem('userToken')
-    
-//     await springAxiosInst.post('/library/delete-directory', {
-//       userToken: userToken,
-//       directoryId: directoryId
-//     })
-    
-//     // 폴더 목록 새로고침
-//     await libraryStore.requestListDirectoryToSpring()
-//   } catch (error) {
-//     console.error('폴더 삭제 실패:', error)
-//   }
-
+const deleteDirectory = async (directoryId) => {
     if (directoryId.toString().startsWith('temp-')) {
         tempDirectory.value = null
         return
+    }
+    try {
+        await libraryStore.requestDeleteDirectoryToSpring(directoryId)
+        await libraryStore.requestListDirectoryToSpring()
+    } catch (error) {
+        console.error('디렉토리 삭제 중 에러 에러 발생:', error)
     }
 }
 
@@ -198,8 +190,8 @@ const updateCategoryFromQuestionList = (value) => {
 .add-directory-container {
     display: flex;
     justify-content: center;
-    align-items: start;
-    margin: 15px;
+    align-items: flex-start;
+    /* margin: 15px; */
 }
 
 .add-directory-button {
@@ -209,9 +201,10 @@ const updateCategoryFromQuestionList = (value) => {
     padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     transition: transform 0.2s;
     width: 200px;
+    margin: 5px;
 }
 
 .add-directory-button:hover {
@@ -222,7 +215,8 @@ const updateCategoryFromQuestionList = (value) => {
     width: 120px;
     height: 96px;
     position: relative;
-    margin-bottom: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     display: flex;
 }
 
@@ -276,10 +270,12 @@ const updateCategoryFromQuestionList = (value) => {
     color: #666;
     z-index: 3;
 }
+
 .button-text {
     font-size: 12px;
     color: #fff;
     text-align: center;
+    margin-left: 20px;
 }
 
 .new-directory-dialog {

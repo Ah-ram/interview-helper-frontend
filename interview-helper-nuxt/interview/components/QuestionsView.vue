@@ -22,16 +22,15 @@
     </div>
 
     <div class="main-content">
-      <div class="nav-container left">
-        <button class="nav-button prev" @click="prevQuestion" :disabled="currentIndex === 0">
-          &lt;
-        </button>
-      </div>
-
       <div class="question-section">
         <div class="questions-container">
           <!-- Single Question View -->
           <div v-if="generatedQuestions.length > 0 && currentIndex !== generatedQuestions.length" class="single-question">
+            <div class="nav-container left">
+              <button class="nav-button prev" @click="prevQuestion" :disabled="currentIndex === 0">
+                &lt;
+              </button>
+            </div>
             <div class="question-card">
               <div class="question-number">질문 {{ currentIndex + 1 }}</div>
               <div class="question-content">{{ generatedQuestions[currentIndex] }}</div>
@@ -42,6 +41,11 @@
               >
                 {{ isSelectedQuestion[currentIndex] ? '즐겨찾기 취소' : '즐겨찾기 추가' }}
                 <v-icon right>{{ isSelectedQuestion[currentIndex] ? 'mdi-star' : 'mdi-star-outline' }}</v-icon>
+              </button>
+            </div>
+            <div class="nav-container right">
+              <button class="nav-button next" @click="nextQuestion" :disabled="currentIndex === generatedQuestions.length">
+                &gt;
               </button>
             </div>
           </div>
@@ -71,11 +75,7 @@
         </div>
       </div>
 
-      <div class="nav-container right">
-        <button class="nav-button next" @click="nextQuestion" :disabled="currentIndex === generatedQuestions.length">
-          &gt;
-        </button>
-      </div>
+      
     </div>
   </div>
 </template>
@@ -83,6 +83,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useInterviewStore } from '../stores/interviewStore';
+import { useRouter } from 'vue-router';
 
 const interviewStore = useInterviewStore()
 
@@ -93,6 +94,7 @@ const emit = defineEmits(['update-category', 'change-category'])
 const isDropdownOpen = ref(false);
 const currentIndex = ref(0);
 const newCategory = ref(props.selectedCategory);
+const router = useRouter()
 
 let isSelectedQuestion = ref([false, false, false, false, false])
 
@@ -121,6 +123,8 @@ const prevQuestion = () => {
 
 const updateCategory = () => {
   emit('update-category', newCategory.value)
+  isSelectedQuestion.value = [false, false, false, false, false]
+  currentIndex.value = 0
 }
 
 const checkQuestion = (index) => {
@@ -136,6 +140,12 @@ const saveQuestion = async () => {
   }
   const categoryIndex: number = props.selectedCategory.id
   const res = await interviewStore.requestSaveQuestionListToSpring(titleList, categoryIndex)
+
+  if (confirm("저장한 질문을 확인하시겠습니까?")) {
+    router.push("/library")
+  } else {
+    router.push("/")
+  }
 }
 </script>
 
@@ -230,7 +240,7 @@ const saveQuestion = async () => {
 
 .nav-container {
   position: fixed;
-  top: 50%;
+  top: 55%;
   transform: translateY(-50%);
   z-index: 90;
 }
@@ -276,21 +286,24 @@ const saveQuestion = async () => {
 
 /* Single Question Styles */
 .single-question {
-  margin-right: -800px;
+  margin-right: -200px;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 60vh;
   width: 100%;
+  position: relative;
 }
 
 .single-question .question-card {
-  background-color: #2a2a2a;
+  background-color: #121212;
   border-radius: 1.5rem;
   padding: 3rem;
   width: 100%;
-  min-width: 1200px;
+  max-width: 1000px;
+  min-width: 800px;
   text-align: center;
+  min-height: 40vh;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
@@ -298,6 +311,10 @@ const saveQuestion = async () => {
   font-size: 1.2rem;
   color: #9ca3af;
   margin-bottom: 2rem;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .single-question .question-content {
@@ -306,6 +323,9 @@ const saveQuestion = async () => {
   margin-bottom: 3rem;
   line-height: 1.6;
   word-break: keep-all;
+  position: relative;
+  top: 60px;
+  left: 0;
 }
 
 .favorite-button {
@@ -322,10 +342,14 @@ const saveQuestion = async () => {
   background-color: #3a3a3a;
   color: white;
   border: none;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .favorite-button:hover {
-  transform: scale(1.05);
+  scale: 1.05
 }
 
 .favorite-button.selected {

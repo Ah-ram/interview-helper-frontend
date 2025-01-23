@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <!-- 초기 카테고리 선택 화면 -->
-      <template v-if="showQuestions == null">
+      <template v-if="!interviewStore.showQuestion">
         <InterviewCategory 
         :categories="categories"
         @click-question="generateQuestions" />
@@ -26,7 +26,7 @@
   import QuestionsView from '../components/QuestionsView.vue';
   import { useInterviewStore } from '../stores/interviewStore';
  
-  const showQuestions = ref(null);
+  const showQuestions = ref(false);
   const generatedQuestions = ref([]);
   const selectedCategory = ref(null);
   const questions = ref([])
@@ -35,9 +35,9 @@
   
   const categories = [
     { id: 0, label: '기술 역량', icon: '🎨' },
-    { id: 1, label: '프로젝트 경험', icon: '👁️' },
+    { id: 1, label: '프로젝트 경험', icon: '🧑‍💻' },
     { id: 2, label: '문제 해결', icon: '📝' },
-    { id: 3, label: '커뮤니케이션', icon: '💡' },
+    { id: 3, label: '커뮤니케이션', icon: '🗣️' },
     { id: 4, label: '자기 소개 및 동기', icon: '💭' },
   ];
 
@@ -57,7 +57,7 @@
     if (response == true) {
       questions.value = await interviewStore.requestGeneratedQuestionsResultToFastAPI()
     }
-    showQuestions.value = true;
+    interviewStore.showQuestion = true
     selectedCategory.value = value;
   };
   </script>
@@ -84,7 +84,7 @@
   /* 질문 생성 후 추가되는 스타일 */
   .questions-view {
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
   }
   
   .category-header {

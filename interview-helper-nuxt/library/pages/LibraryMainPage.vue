@@ -165,7 +165,6 @@ const goToDirectory = (value) => {
 const updateCategoryFromQuestionList = (value) => {
     selectedCategory.value = value
 }
-
 </script>
   
 <style scoped>

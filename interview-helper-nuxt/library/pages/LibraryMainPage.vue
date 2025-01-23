@@ -10,6 +10,7 @@
             :create-date="directory.createDate"
             :update-date="directory.updateDate"
             :is-temp="directory.isTemp"
+            :is-selected="selectedDirectory && selectedDirectory.id === directory.id"
             @directorySelected="handleDirectorySelect"
             @createDirectory="createDirectory"
             @updateName="updateDirectoryName"
@@ -301,4 +302,5 @@ const updateCategoryFromQuestionList = (value) => {
     border-color: #2D7AD4;
     box-shadow: 0 0 0 2px rgba(54, 147, 244, 0.3);
 }
+
 </style>

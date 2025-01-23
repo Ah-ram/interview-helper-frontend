@@ -1,5 +1,5 @@
 <template>
-    <div class="directory-container" @click="handleDirectoryClick">
+    <div class="directory-container" :class="{ selected: isSelected }" @click="handleDirectoryClick">
         <div class="directory-icon">
             <div class="directory-content">
                 <div class="edit-overlay">
@@ -41,6 +41,7 @@ interface DirectoryProps {
     createDate: string
     updateDate: string
     isTemp?: boolean
+    isSelected?: boolean
 }
 
 const props = defineProps<DirectoryProps>()
@@ -56,8 +57,8 @@ const directoryName = ref(props.name)
 const isEditing = ref(false)
 // const nameInput = ref<HTMLInputElement | null>(null)
 const nameInput = ref(null as unknown as HTMLInputElement)
-
 const isTemp = computed(() => props.isTemp || false)
+const isSelected = computed(() => props.isSelected || false)
 
 onMounted(() => {
     if (props.isTemp) {
@@ -152,6 +153,22 @@ const handleDelete = () => {
 
 .directory-container:hover .directory-actions {
     opacity: 1;
+}
+
+.directory-container.selected .directory-icon::before {
+    background: linear-gradient(180deg, #2D7AD4 0%, #1A5CAF 100%);
+}
+
+.directory-container.selected .directory-icon::after {
+    background: linear-gradient(180deg, #2D7AD4 0%, #1A5CAF 100%);
+    box-shadow: 
+        inset 0 -2px 5px rgba(0,0,0,0.2),
+        0 5px 15px rgba(0,0,0,0.2);
+}
+
+.directory-container.selected .directory-content {
+    background: linear-gradient(180deg, #3693F4 0%, #2563f4 100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .directory-icon {
@@ -284,4 +301,5 @@ const handleDelete = () => {
     text-align: center;
     margin-top: 2px;
 }
+
 </style>

@@ -85,10 +85,6 @@ const handleEnter = (event: KeyboardEvent) => {
             isEnterPressed: true
         })
     } else {
-        if (props.name == 'default') {
-            alert('default 폴더는 이름을 변경할 수 없습니다!')
-            return
-        }
         emit('updateName', {
             id: props.id,
             name: directoryName.value.trim(),
@@ -124,10 +120,6 @@ const startEditing = () => {
 
 const handleDelete = () => {
     if (confirm('정말 이 폴더를 삭제하시겠습니까?')) {
-        if (props.name == 'default') {
-            alert('default 폴더는 삭제할 수 없습니다!')
-            return 
-        }
         emit('deleteDirectory', props.id)
     }
 }
@@ -247,7 +239,6 @@ const handleDelete = () => {
     border: 1px solid #3693F4;
     border-radius: 4px;
     text-align: center;
-    color: #aaa;
 }
 
 .directory-name-input:focus {

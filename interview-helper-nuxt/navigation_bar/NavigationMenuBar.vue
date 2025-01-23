@@ -30,6 +30,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuthenticationStore } from '../authentication/stores/authenticationStore';
 import { useUserProfileStore } from '../user_profile/stores/UserProfileStore';
 import { defineComponent, onBeforeUnmount, ref, computed, watch, onMounted } from 'vue';
+import { useInterviewStore } from '../interview/stores/interviewStore';
 
 export default defineComponent({
     setup() {
@@ -37,6 +38,7 @@ export default defineComponent({
         const router = useRouter()
         const authenticationStore = useAuthenticationStore()
         const userProfileStore = useUserProfileStore()
+        const interviewStore = useInterviewStore()
 
         const isScrolled = computed(() => {
             if (path.value !== '/') {
@@ -58,8 +60,12 @@ export default defineComponent({
             router.push("/board/list")
         }
 
-        function goToInterview() {
-            router.push("/interview")
+        async function goToInterview() {
+            if (interviewStore.showQuestion) {
+                interviewStore.showQuestion = false
+            } else {
+                router.push("/interview")
+            }
         }
 
         async function goToGoogleLogin() {

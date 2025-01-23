@@ -2,6 +2,9 @@ import { defineStore } from 'pinia';
 import { createAxiosInstances } from "../../utility/axiosInstance";
 
 export const useInterviewStore = defineStore('interviewStore', {
+    state: () => ({
+        showQuestion: false
+    }),
     actions: {
         async requestGenerateQuestionsToFastAPI(category: string) {
             const { fastapiAxiosInst } = createAxiosInstances();

@@ -29,7 +29,7 @@ import { ref } from 'vue'
 const props = defineProps(["selectedDirectory", "selectedCategory"])
 const emit = defineEmits(["close-sidebar", "select-category"])
 
-const categories = ref(["🎨 기술 역량", "👁️ 프로젝트 경험", "📝 문제 해결", "💡 커뮤니케이션", "💭 자기 소개 및 동기"])
+const categories = ref(["🎨 기술 역량", "🧑‍💻 프로젝트 경험", "📝 문제 해결", "🗣️ 커뮤니케이션", "💭 자기 소개 및 동기"])
 
 const closeSidebar = () => {
     emit("close-sidebar", false)

@@ -4,7 +4,7 @@ import { createAxiosInstances } from "../../utility/axiosInstance";
 
 export const useLibraryStore = defineStore('libraryStore', {
     state: () => ({
-        directories: [] as Array<{ id: number | string; name: string; updateDate: string, createDate: string, isTemp: boolean }>,
+        directories: [] as Array<{ id: number | string; name: string; updateDate: string, createDate: string, isTemp: boolean, isSelected: boolean }>,
     }),
 
     actions: {

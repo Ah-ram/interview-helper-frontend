@@ -86,13 +86,14 @@ export const useLibraryStore = defineStore('libraryStore', {
                 console.error('requestDeleteDirectoryToSpring() 중 에러 발생:', error)
             }
         },
-        async requestMoveQuestionToSpring(directoryId: number, categoryIndex: number, questionId: number) {
+        async requestMoveQuestionToSpring(directoryId: number, questionId: number) {
             const { springAxiosInst } = createAxiosInstances()
 
             try {
                 const userToken = localStorage.getItem('userToken')
-                const response =  await springAxiosInst.put(`library/move-question/${directoryId}`,
-                     { data: { userToken: userToken, categoryIndex: categoryIndex, questionId: questionId }})
+                console.log("userToken:", userToken)
+                console.log("questionId:", questionId)
+                const response = await springAxiosInst.put(`/library/move-question/${directoryId}`, { userToken: userToken, questionId: questionId })
                 console.log("requestMoveQuestionToSpring() response:", response)
 
                 return response.data

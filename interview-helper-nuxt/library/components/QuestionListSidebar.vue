@@ -36,7 +36,8 @@ const closeSidebar = () => {
 }
 
 const selectDirectory = async (value) => {
-    const response = await libraryStore.requestMoveQuestionToSpring(value, props.selectedCategory, props.selectedQuestion)
+    console.log("selectDirectory:", value, props.selectedQuestion)
+    const response = await libraryStore.requestMoveQuestionToSpring(value, props.selectedQuestion)
     console.log("isMoved:", response)
     emit("select-directory", value)
 }

@@ -140,8 +140,14 @@ const saveQuestion = async () => {
   }
   const categoryIndex: number = props.selectedCategory.id
   const res = await interviewStore.requestSaveQuestionListToSpring(titleList, categoryIndex)
+  
+  const idList: number[] = []
+  for (let i = 0; i < res.length; i++) {
+    idList.push(res[i].questionId)
+  }
+  const fastapiRes = await interviewStore.requestSaveQuestionListToChromaViaSpring(idList, categoryIndex, titleList)
 
-  if (confirm("저장한 질문을 확인하시겠습니까?")) {
+  if (titleList.length > 0 && confirm("저장한 질문을 확인하시겠습니까?")) {
     router.push("/library")
   } else {
     router.push("/")

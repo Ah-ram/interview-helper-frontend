@@ -4,8 +4,12 @@
         <div class="directories">
             <h2>Directories</h2>
             <ul>
-                <div v-for="(directory, index) in directories" :key="index" @click="selectDirectory(directory.id)" class="directory">
-                    <v-btn elevation="0" class="directory-button">{{ directory.name }}
+                <div v-for="(directory, index) in directories" 
+                     :key="index" 
+                     @click="selectDirectory(directory.id)" 
+                     class="directory">
+                    <v-btn elevation="0" class="directory-button">
+                        {{ directory.name }}
                     </v-btn>
                 </div>
             </ul>
@@ -45,28 +49,38 @@ const selectDirectory = async (value) => {
 
 <style scoped>
 .sidebar {
-    position: relative;
+    position: fixed;
     background-color: hotpink;
-    width: 300px;
+    width: 100%;
+    height: 100vh;
     border-left: 1px solid #666;
-    padding-left: 20px;
+    padding: clamp(10px, 3vw, 20px);
     flex-shrink: 0;
+    top: 0;
     right: 0;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: 100%;
+    }
 }
 
 .close-button {
     position: absolute;
-    margin-top: 30px;
-    right: 20px;
-    /* background: red; */
+    top: clamp(15px, 4vw, 30px);
+    right: clamp(10px, 3vw, 20px);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: clamp(24px, 5vw, 30px);
+    height: clamp(24px, 5vw, 30px);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -76,76 +90,62 @@ const selectDirectory = async (value) => {
 }
 
 .close-button:hover {
-    scale: 1.1;
+    transform: scale(1.1);
     background: #666;
     opacity: 0.8;
 }
 
-.categories {
-    margin-top: 80px;
+.directories {
+    margin-top: clamp(40px, 8vw, 80px);
 }
 
-.categories h2 {
+.directories h2 {
     color: #fff;
-    margin-bottom: 20px;
+    margin-bottom: clamp(15px, 4vw, 20px);
+    font-size: clamp(18px, 4vw, 24px);
 }
 
-.categories ul {
-    list-style: none;
-    padding: 0;    
+.directory {
+    width: 100%;
+    margin-bottom: clamp(8px, 2vw, 15px);
 }
 
-.categories li {
-    margin: 10px 0;
-    font-size: 16px;
-}
-
-.category {
-    width: 300px;
-    /* padding-left: -10px; */
-    /* margin-bottom: 17px; */
-}
-
-.category-button {
+.directory-button {
     border: none;
     border-radius: 8px;
     background-color: #121212;
     color: #fff;
-    width: 282px;
+    width: 100%;
+    max-width: 282px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    font-size: 16px;
-    height: 60px;
-    margin-left: -12px;
-    padding-left: 30px;
+    font-size: clamp(14px, 3vw, 16px);
+    height: clamp(48px, 10vw, 60px);
+    padding-left: clamp(15px, 4vw, 30px);
 }
 
-.category-button:hover {
+.directory-button:hover {
     background-color: #2563eb;
 }
 
 .directory-information {
     color: #fff;
-    padding-top: 30px;
+    padding-top: clamp(20px, 5vw, 30px);
     border-top: 1px solid #666;
     margin-top: 15vh;
-    width: 282px;
-    margin-left: -12px;
+    width: 100%;
+    max-width: 282px;
 }
 
-.directory-information h2{
-    margin: 0 0 30px 12px;
+.directory-information h2 {
+    margin: 0 0 clamp(20px, 5vw, 30px) clamp(8px, 2vw, 12px);
 }
 
 .directory-information-content p {
-    padding-left: 30px;
-    margin: 15px 0;
+    padding-left: clamp(15px, 4vw, 30px);
+    margin: clamp(10px, 3vw, 15px) 0;
     font-weight: bold;
+    font-size: clamp(14px, 3vw, 16px);
 }
-
-.directory-information-content p span {
-    color: #3693f4;
-}
-
 </style>

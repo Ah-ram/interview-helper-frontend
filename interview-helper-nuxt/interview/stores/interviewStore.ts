@@ -55,6 +55,19 @@ export const useInterviewStore = defineStore('interviewStore', {
             } catch (error) {
                 console.error("requestSaveQuestionListToSpring() 중 에러 발생:", error)
             }
+        },
+        async requestSaveQuestionListToChromaViaSpring(idList: number[], categoryIndex: number, titleList: string[]) {
+            const { springAxiosInst } = createAxiosInstances()
+
+            try {
+                const userToken = localStorage.getItem("userToken")
+                const response = await springAxiosInst.post("/ai-request/send", { userToken: userToken, command: 31, data: [ idList, categoryIndex, titleList ]})
+                console.log("requestSaveQuestionListToChromaViaSpring() response:", response)
+
+                return response.data
+            } catch (error) {
+                console.error("requestSaveQuestionListToChromaViaSpring() 중 에러 발생:", error)
+            }
         }
     }
 });

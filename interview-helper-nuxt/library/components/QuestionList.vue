@@ -5,7 +5,7 @@
         <span>← 돌아가기</span>
       </button>
       <div class="search-box">
-        <input type="text" placeholder="질문 검색..." v-model="searchQuery">
+        <input type="text" placeholder="질문 검색..." v-model="searchQuery" @keyup.enter="searchQuestion">
       </div>
       <div class="category-filter">
         <select v-model="selectedCategoryIndex" @change="updateCategory($event, selectedCategoryIndex)">
@@ -132,6 +132,14 @@ const refreshQuestionList = async () => {
 const toggleSidebar = () => {
     isSidebarVisible.value = false
     selectedQuestion.value = null
+}
+
+const searchQuestion = async () => {
+    const response = await libraryStore.requestSearchQuestionFromChromaDBViaSpring(searchQuery.value)
+    console.log("searchQuestion response:", response)
+    const res = await libraryStore.requestSearchQuestionResultToFastAPI()
+    console.log("search questions result:", res)
+    savedQuestionList.value = res
 }
 </script>
 

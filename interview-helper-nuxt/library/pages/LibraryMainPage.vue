@@ -1,8 +1,8 @@
 <template>
     <div v-if="!isQuestionListVisible" class="wrapper">
-    <div class="library-container">
+      <div class="library-container">
         <div class="directory-grid">
-        <Directory
+          <Directory
             v-for="directory in allDirectories"
             :key="directory.id"
             :id="directory.id"
@@ -15,37 +15,36 @@
             @createDirectory="createDirectory"
             @updateName="updateDirectoryName"
             @deleteDirectory="deleteDirectory"
-        />
-        <div class="add-directory-container">
-        <button @click="addTempDirectory" class="add-directory-button">
-          <div class="new-directory">
-            <div class="directory-front"></div>
-            <v-icon class="material-icons">mdi-plus</v-icon>
+          />
+          <div class="add-directory-container">
+            <button @click="addTempDirectory" class="add-directory-button">
+              <div class="new-directory">
+                <div class="directory-front"></div>
+                <v-icon class="material-icons">mdi-plus</v-icon>
+              </div>
+              <span class="button-text">New Directory</span>
+            </button>
           </div>
-          <span class="button-text">New Directory</span>
-        </button>
+        </div>
       </div>
-        
-    </div>
-  </div>
-  <div v-if="isSidebarVisible">
-            <LibraryDirectorySidebar 
-            :selected-directory="selectedDirectory"
-            :selected-category="selectedCategory"
-            @closeSidebar="closeSidebar"
-            @selectCategory="selectCategory"
-            />
-    </div>
+      <div v-if="isSidebarVisible" class="sidebar-container">
+        <LibraryDirectorySidebar 
+          :selected-directory="selectedDirectory"
+          :selected-category="selectedCategory"
+          @closeSidebar="closeSidebar"
+          @selectCategory="selectCategory"
+        />
+      </div>
     </div>
     <div v-else>
-        <QuestionList 
-            :selected-directory="selectedDirectory"
-            :selected-category="selectedCategory"
-            @goToDirectory="goToDirectory"
-            @updateCategory="updateCategoryFromQuestionList"
-        />
+      <QuestionList 
+        :selected-directory="selectedDirectory"
+        :selected-category="selectedCategory"
+        @goToDirectory="goToDirectory"
+        @updateCategory="updateCategoryFromQuestionList"
+      />
     </div>
-</template>
+  </template>
 
 <script setup lang="ts">
 import { onMounted, computed, ref, nextTick } from 'vue';
@@ -167,139 +166,61 @@ const updateCategoryFromQuestionList = (value) => {
 }
 </script>
   
-<style scoped>
-.wrapper {
-    width: 100%;
-    display: flex;
-    
-}
-
-.library-container {
-    padding: 50px;
-    background-color: #121212;
-    width: calc(100% - 300px);
-}
-
-.directory-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 50px;
-    padding: 20px;
-}
-
-.add-directory-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    /* margin: 15px; */
-}
-
-.add-directory-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    transition: transform 0.2s;
-    width: 200px;
-    margin: 5px;
-}
-
-.add-directory-button:hover {
-    transform: scale(1.05);
-}
-
-.new-directory {
-    width: 120px;
-    height: 96px;
-    position: relative;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    display: flex;
-}
-
-.new-directory::before {
-    content: '';
-    width: 50%;
-    height: 25px;
-    position: absolute;
-    top: -12px;
-    left: 0;
-    background: linear-gradient(180deg, #E0E0E0 0%, #CCCCCC 100%);
-    border-radius: 8px 15px 0 0;
-    clip-path: polygon(
-         0 0,
-          70% 0,
-          100% 70%,
-          100% 100%,
-          0 100%
-    );
-}
-
-.new-directory::after {
-    content: '';
+  <style scoped>
+  .wrapper {
     width: 100%;
     height: 100%;
-    position: absolute;
-    background: linear-gradient(180deg, #E0E0E0 0%, #CCCCCC 100%);
-    border-radius: 8px;
-    /* box-shadow: 
-        inset 0 -2px 5px rgba(0,0,0,0.1),
-        0 5px 15px rgba(0,0,0,0.1); */
-}
-
-.directory-front {
-    width: 100%;
-    height: 90%;
-    position: absolute;
-    bottom: 0;
-    background: linear-gradient(180deg, #F0F0F0 0%, #E0E0E0 100%);
-    border-radius: 8px;
-    z-index: 2;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.new-directory .material-icons {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    color: #666;
-    z-index: 3;
-}
-
-.button-text {
-    font-size: 12px;
-    color: #fff;
-    text-align: center;
-    margin-left: 20px;
-}
-
-.new-directory-dialog {
-    width: 120px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin: 15px;
-}
-
-.directory-name-input {
+  }
+  
+  @media (min-width: 768px) {
+    .wrapper {
+      flex-direction: row;
+    }
+  }
+  
+  .library-container {
+    padding: clamp(20px, 5vw, 50px);
+    background-color: #121212;
     width: 100%;
-    padding: 8px;
-    border: 2px solid #3693F4;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: center;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.directory-name-input:focus {
-    border-color: #2D7AD4;
-    box-shadow: 0 0 0 2px rgba(54, 147, 244, 0.3);
-}
-
-</style>
+  }
+  
+  @media (min-width: 768px) {
+    .library-container {
+      width: calc(100% - 300px);
+    }
+  }
+  
+  .directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr));
+    gap: clamp(20px, 3vw, 50px);
+    padding: clamp(10px, 2vw, 20px);
+  }
+  
+  .add-directory-button {
+    width: clamp(120px, 15vw, 200px);
+  }
+  
+  .new-directory {
+    width: clamp(80px, 12vw, 120px);
+  }
+  
+  .button-text {
+    font-size: clamp(10px, 1.5vw, 12px);
+  }
+  
+  .sidebar-container {
+    width: 100%;
+    max-height: 300px;
+  }
+  
+  @media (min-width: 768px) {
+    .sidebar-container {
+      width: 300px;
+      max-height: none;
+    }
+  }
+  </style>
+  

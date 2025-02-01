@@ -30,12 +30,12 @@
                               :current-nickname="userInfo.nickname"
                               @update:nickname="handleNicknameChange"
                           />
+                          </div>
                       </div>
                   </div>
               </div>
           </div>
       </div>
-  </div>
   </div>
 </template>
 
@@ -150,25 +150,30 @@ onMounted(async () => {
 }
 
 .profile-details {
-    width: 80%;
-    margin-left: 40px;
+    width: 90%;
+    margin-left: 2vh;
 }
 
 .info-row {
     display: flex;
+    align-items: center;
     padding: 24px 0;
     border-bottom: 1px solid #404040;
+    width: 100%;
 }
 
 .info-label {
-    width: 120px;
+    flex: 0 0 100px;
     color: #aaaaaa;
     font-weight: 500;
 }
 
 .info-value {
     flex: 1;
+    display: flex;
+    align-items: center;
     color: #ffffff;
+    /* min-width: 0; */
 }
 
 .info-value.disabled {
@@ -182,7 +187,7 @@ onMounted(async () => {
     }
 
     .profile-image-container {
-        margin-bottom: 24px;
+        margin-bottom: 10px;
     }
 
     .right-content {
@@ -196,6 +201,7 @@ onMounted(async () => {
 
     .info-label {
         width: 100%;
+        max-height: 30px;
     }
 }
 </style>

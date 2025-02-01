@@ -1,6 +1,6 @@
 <template>
     <div class="nickname-section">
-        <div v-if="!isEditing" class="input-group">
+        <div v-if="!isEditing" class="display-group">
             <span class="nickname">{{ currentNickname }}</span>
             <button @click="startEditing" class="edit-nickname-btn start">변경</button>
         </div>
@@ -38,6 +38,7 @@
                         취소
                     </button>
                 </div>
+              </div>
             </div>
             <!--중복확인 성공 시 변경 버튼 표시-->
             <div v-if="isNicknameChecked" class="success-group">
@@ -45,7 +46,6 @@
                 <span class="check-success">✓ 사용 가능한 닉네임입니다</span>
             </div>
             <p v-if="hasError" class="error-message">{{ errorMessage }}</p>
-        </div>
     </div>
   </template>
   
@@ -154,12 +154,28 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
+}
+
+.display-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .input-group {
   display: flex;
   align-items: center;
+  width: 100%;
   gap: 0.75rem;
+  /* padding: 0 8px; */
+}
+
+.nickname-container {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 100px; 
 }
 
 .edit-mode-container {
@@ -175,13 +191,15 @@
 }
 
 .nickname-input {
+  flex: 1;
+  min-width: 100px;
+  max-width: 400px;
   padding: 4px 8px;
   border: 1px solid #a0a0a0;
   border-radius: 4px;
   color: #808080;
   font-size: 1rem;
   font-weight: 500;
-  min-width: 200px;
 }
 
 .nickname-input:focus {
@@ -195,6 +213,7 @@
 .action-btn {
     display: flex;
     gap: 0.75rem;
+    flex-shrink: 0;
 }
 
 .check-btn {
@@ -226,10 +245,6 @@
   color: #ffffff;
   font-size: 1rem;
   font-weight: 500;
-}
-
-.edit-nickname-btn.start {
-    margin-left: 300px;
 }
 
 .edit-nickname-btn {
@@ -272,6 +287,23 @@
   font-size: 14px;
   margin-top: 8px;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .input-group {
+        flex-wrap: wrap;
+    }
+    
+  .nickname-input {
+      width: 100%;
+      max-width: 100%;
+  }
+  
+  .action-btn {
+      margin-top: 0.5rem;
+      width: 100%;
+      justify-content: flex-end;
+  }
 }
 
 </style>
